@@ -5,6 +5,29 @@ from api.models import Paper, Project
 from api.serializers import PaperSerializer, ProjectListSerializer, ProjectSerializer, UserSerializer
 
 
+@api_view(['POST'])
+def extension_add_paper(request):
+    data = request.data
+
+    #  Search if paper currently exists, if not then create 
+    paper = Paper.objects.filter(doi=data.get('doi')).first()
+    print(paper, data)
+    if paper is None:
+        paper = Paper(
+            name=data.get('name'),
+            doi=data.get('doi'),
+            abstract=data.get('abstract'),
+            authors=data.get('authors'),
+        )
+        paper.save()
+
+    # Add to default project i.e. unsorted (for that user)
+    project = Project.get_default_project(request.user)
+    print(project)
+    project.add_paper(paper, 'Default')
+
+    return Response(status=status.HTTP_201_CREATED)
+
 class PaperViewset(viewsets.GenericViewSet, mixins.ListModelMixin):
     queryset = Paper.objects.all()
     serializer_class = PaperSerializer

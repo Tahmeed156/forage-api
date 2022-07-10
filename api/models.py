@@ -30,17 +30,30 @@ class Project(models.Model):
 
     collaborators = models.ManyToManyField(User, through='ProjectCollaborator')
 
+
     @classmethod
     def get_user_projects(cls, user):
         return cls.objects.filter(collaborators__id=user.id).all()
 
+
     @classmethod
     def get_default_project(cls, user):
-        # NOTE: Query projects to find my default project (user in collaborators, role='Creator', is_default=True)
-        pass
+        return cls.objects.filter(collaborators__id=user.id, 
+                                  projectcollaborator__role='Creator', 
+                                  is_default=True).first()
+
+
+    def add_paper(self, paper, list_name='Default'):
+        list_instance = ProjectList.objects.filter(project=self, name=list_name).first()
+        pp_instance = ProjectPaper(list=list_instance, paper=paper)
+        pp_instance.save()
+        list_instance.projectpaper_set.add(pp_instance)
+        list_instance.save()
+
 
     def __str__(self):
         return f"{self.id}-{self.name}"
+
 
 class ProjectCollaborator(models.Model):
     role = models.CharField(max_length=256, null=True, blank=True)
@@ -68,6 +81,7 @@ class Paper(models.Model):
     # TODO: Conference / Journal
     
     lists = models.ManyToManyField(ProjectList, through='ProjectPaper')
+
 
     def __str__(self):
         return f"{self.id}-{self.name[:20]}..."

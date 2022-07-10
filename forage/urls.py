@@ -13,6 +13,9 @@ router.register(r'projects', views.ProjectViewset, basename='Project')
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('api/', include(router.urls)),
+
+    path('extension/add-paper/', views.extension_add_paper, name='extension-add-paper'),
+
     path('admin/', admin.site.urls),
     path('auth/token/', obtain_auth_token)
 ]
