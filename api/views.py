@@ -5,12 +5,12 @@ from api.models import Paper, Project
 from api.serializers import PaperSerializer, ProjectListSerializer, ProjectSerializer, UserSerializer
 
 
-class PaperViewset(viewsets.GenericViewset, mixins.ListModelMixin):
+class PaperViewset(viewsets.GenericViewSet, mixins.ListModelMixin):
     queryset = Paper.objects.all()
     serializer_class = PaperSerializer
 
 
-class ProjectViewset(viewsets.GenericViewset, mixins.ListModelMixin):
+class ProjectViewset(viewsets.GenericViewSet, mixins.ListModelMixin):
     serializer_class = ProjectSerializer
 
 

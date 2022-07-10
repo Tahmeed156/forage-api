@@ -2,6 +2,8 @@ from django.urls import include, path
 from rest_framework import routers
 from django.contrib import admin
 from api import views
+from rest_framework.authtoken.views import obtain_auth_token
+
 
 router = routers.DefaultRouter()
 router.register(r'papers', views.PaperViewset)
@@ -12,4 +14,5 @@ router.register(r'projects', views.ProjectViewset, basename='Project')
 urlpatterns = [
     path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
+    path('auth/token/', obtain_auth_token)
 ]
