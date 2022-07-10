@@ -19,5 +19,15 @@ class ProjectViewset(viewsets.GenericViewset, mixins.ListModelMixin):
         return Project.get_user_projects(self.request.user)
 
 
+    @action(detail=True, methods=['GET'])
+    def collaborators(self, request, pk):
+        clb = Project.objects.get(id=pk).collaborators
+        serializer = UserSerializer(clb, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+    @action(detail=True, methods=['GET'])
+    def lists(self, request, pk):
+        clb = Project.objects.get(id=pk).lists
+        serializer = ProjectListSerializer(clb, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

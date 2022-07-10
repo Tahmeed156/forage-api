@@ -20,7 +20,17 @@ class Project(models.Model):
 
     collaborators = models.ManyToManyField(User, through='ProjectCollaborator')
 
-# Create your models here.
+    @classmethod
+    def get_user_projects(cls, user):
+        return cls.objects.filter(collaborators__id=user.id).all()
+
+    @classmethod
+    def get_default_project(cls, user):
+        # NOTE: Query projects to find my default project (user in collaborators, role='Creator', is_default=True)
+        pass
+
+    def __str__(self):
+        return f"{self.id}-{self.name}"
 
 class ProjectCollaborator(models.Model):
     role = models.CharField(max_length=256, null=True, blank=True)
