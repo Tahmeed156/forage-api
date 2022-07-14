@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view, action
 from rest_framework import status, viewsets, mixins
 from rest_framework.response import Response
-from api.models import Paper, Project
+from api.models import Paper, Project, ProjectList
 from api.serializers import PaperSerializer, ProjectListSerializer, ProjectSerializer, UserSerializer
 
 
@@ -28,12 +28,17 @@ def extension_add_paper(request):
 
     return Response(status=status.HTTP_201_CREATED)
 
-class PaperViewset(viewsets.GenericViewSet, mixins.ListModelMixin):
+
+class PaperViewset(viewsets.GenericViewSet,
+                   mixins.ListModelMixin,
+                   mixins.RetrieveModelMixin):
     queryset = Paper.objects.all()
     serializer_class = PaperSerializer
 
 
-class ProjectViewset(viewsets.GenericViewSet, mixins.ListModelMixin):
+class ProjectViewset(viewsets.GenericViewSet, 
+                     mixins.ListModelMixin,
+                     mixins.RetrieveModelMixin):
     serializer_class = ProjectSerializer
 
 
@@ -49,8 +54,22 @@ class ProjectViewset(viewsets.GenericViewSet, mixins.ListModelMixin):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class ProjectListViewset(viewsets.GenericViewSet, 
+                         mixins.ListModelMixin, 
+                         mixins.RetrieveModelMixin):
+    serializer_class = ProjectListSerializer
+
+    def get_queryset(self):
+        return ProjectList.objects.filter(project_id=self.kwargs['project_pk'])
+
     @action(detail=True, methods=['GET'])
-    def lists(self, request, pk):
-        clb = Project.objects.get(id=pk).lists
-        serializer = ProjectListSerializer(clb, many=True)
+    def papers(self, request, project_pk, pk):
+        project_list_instance= ProjectList.objects.get(id=pk)
+
+        print(project_list_instance.project_id, project_pk, pk)
+        if project_list_instance.project_id != int(project_pk):
+            raise PermissionError("List not in project")
+
+        paper_instances = project_list_instance.paper_set.all()
+        serializer = PaperSerializer(paper_instances, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
