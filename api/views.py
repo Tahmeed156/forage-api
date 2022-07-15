@@ -47,7 +47,8 @@ def extension_paper_to_project(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-    return Response(status=status.HTTP_201_CREATED)
+def extension_add_collaborator_to_paper():
+    pass
 
 
 class PaperViewset(viewsets.GenericViewSet,
@@ -55,6 +56,15 @@ class PaperViewset(viewsets.GenericViewSet,
                    mixins.RetrieveModelMixin):
     queryset = Paper.objects.all()
     serializer_class = PaperSerializer
+
+
+    @action(detail=False, methods=['GET'])
+    def unsorted(self, request):
+        project_instance = Project.get_default_project(request.user)
+        list_instance = project_instance.lists.first()
+
+        serializer = PaperSerializer(list_instance.paper_set.all(), many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ProjectViewset(viewsets.GenericViewSet, 
