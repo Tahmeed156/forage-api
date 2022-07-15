@@ -27,6 +27,7 @@ class Project(models.Model):
     is_default = models.BooleanField(default=False, blank=True)  
 
     # TODO: Need to create a default project when creating user
+    # TODO: Need a default list for each project, first saved
 
     collaborators = models.ManyToManyField(User, through='ProjectCollaborator')
 
@@ -49,6 +50,11 @@ class Project(models.Model):
         pp_instance.save()
         list_instance.projectpaper_set.add(pp_instance)
         list_instance.save()
+        return pp_instance, list_instance
+
+
+    def is_collaborator(self, user):
+        return user in self.collaborators.all()
 
 
     def __str__(self):

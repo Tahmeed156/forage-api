@@ -1,8 +1,8 @@
 from rest_framework.decorators import api_view, action
-from rest_framework import status, viewsets, mixins
+from rest_framework import status, viewsets, mixins, exceptions
 from rest_framework.response import Response
-from api.models import Paper, Project, ProjectList
-from api.serializers import PaperSerializer, ProjectListSerializer, ProjectSerializer, UserSerializer
+from api.models import Paper, Project, ProjectList, ProjectPaper
+from api.serializers import PaperSerializer, ProjectListSerializer, ProjectPaperSerializer, ProjectSerializer, UserSerializer
 
 
 @api_view(['POST'])
@@ -24,7 +24,28 @@ def extension_add_paper(request):
     # Add to default project i.e. unsorted (for that user)
     project = Project.get_default_project(request.user)
     print(project)
-    project.add_paper(paper, 'Default')
+    pp_instance, _ = project.add_paper(paper, 'Default')
+
+    return Response({"ppid": pp_instance.id}, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+def extension_paper_to_project(request):
+    data = request.data
+
+    pp_instance = ProjectPaper.objects.get(id=data.get("ppid"))
+    pl_instance = ProjectList.objects.get(id=data.get("list_id"), 
+                                          project_id=data.get("project_id"))
+
+    if not pl_instance.project.is_collaborator(request.user):
+        raise exceptions.PermissionDenied("User not in project")
+
+    pp_instance.list = pl_instance
+    pp_instance.save()
+
+    serializer = ProjectPaperSerializer(pp_instance)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
     return Response(status=status.HTTP_201_CREATED)
 
@@ -68,7 +89,7 @@ class ProjectListViewset(viewsets.GenericViewSet,
 
         print(project_list_instance.project_id, project_pk, pk)
         if project_list_instance.project_id != int(project_pk):
-            raise PermissionError("List not in project")
+            raise exceptions.PermissionDenied("List not in project")
 
         paper_instances = project_list_instance.paper_set.all()
         serializer = PaperSerializer(paper_instances, many=True)

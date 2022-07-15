@@ -20,6 +20,7 @@ urlpatterns = [
     path('api/', include(project_router.urls)),
 
     path('extension/add-paper/', views.extension_add_paper, name='extension-add-paper'),
+    path('extension/paper-to-project/', views.extension_paper_to_project, name='extension-paper-to-project'),
 
     path('admin/', admin.site.urls),
     path('auth/token/', obtain_auth_token)
