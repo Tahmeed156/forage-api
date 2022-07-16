@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import Paper, Project, ProjectList, User, ProjectPaper
+from api.models import Paper, Project, ProjectList, User, ProjectPaper, ProjectCollaborator, Task
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
     """ Helper class to select fields dynamically via parameters """
@@ -47,3 +47,15 @@ class ProjectSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Project
         fields = ('id', 'name', 'url', 'description', 'is_default', 'collaborators', 'lists')
+
+
+class ProjectCollaboratorSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = ProjectCollaborator
+        fields = ('id', 'collaborator', 'role', 'project')
+
+
+class TaskSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Task
+        fields = ('id', 'name', 'status', 'start_date', 'due_date', 'assignees')

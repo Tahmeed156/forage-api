@@ -100,3 +100,14 @@ class ProjectPaper(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, blank=True)
     list = models.ForeignKey(ProjectList, on_delete=models.CASCADE, null=False)
     paper = models.ForeignKey(Paper, on_delete=models.PROTECT, null=False)
+
+
+class Task(models.Model):
+    name = models.CharField(max_length=256)
+    start_date = models.DateTimeField(blank=True, null=True)
+    due_date = models.DateTimeField(blank=True, null=True)
+    status = models.CharField(max_length=128, default='Later', blank=True)
+
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False)
+    project_paper = models.ForeignKey(ProjectPaper, on_delete=models.CASCADE)
+    assignees = models.ManyToManyField(ProjectCollaborator, related_name='tasks')
