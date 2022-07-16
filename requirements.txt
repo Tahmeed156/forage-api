@@ -4,6 +4,7 @@ backcall==0.2.0
 backports.zoneinfo==0.2.1
 decorator==5.1.1
 Django==4.0.6
+django-cors-headers==3.13.0
 djangorestframework==3.13.1
 drf-nested-routers==0.93.4
 executing==0.8.3

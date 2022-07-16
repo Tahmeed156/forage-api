@@ -1,4 +1,4 @@
-from rest_framework.decorators import api_view, action
+from rest_framework.decorators import api_view, action, authentication_classes, permission_classes
 from rest_framework import status, viewsets, mixins, exceptions
 from rest_framework.response import Response
 from api.models import Paper, Project, ProjectList, ProjectPaper
@@ -23,7 +23,6 @@ def extension_add_paper(request):
 
     # Add to default project i.e. unsorted (for that user)
     project = Project.get_default_project(request.user)
-    print(project)
     pp_instance, _ = project.add_paper(paper, 'Default')
 
     return Response({"ppid": pp_instance.id}, status=status.HTTP_201_CREATED)
@@ -49,6 +48,13 @@ def extension_paper_to_project(request):
 
 def extension_add_collaborator_to_paper():
     pass
+
+
+@api_view(['GET'])    
+@authentication_classes([])
+@permission_classes([])
+def test_api(request):
+   return Response({ "message": "Successfully accessed API" })
 
 
 class PaperViewset(viewsets.GenericViewSet,
