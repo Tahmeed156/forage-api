@@ -67,6 +67,10 @@ class ProjectCollaborator(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False)
 
 
+    def __str__(self):
+        return f"{self.id}-{self.collaborator.username}...-{self.project.name}"
+
+
 class ProjectList(models.Model):  # FIXME: Change name
     name = models.CharField(max_length=256, null=False)
     is_archived = models.BooleanField(default=False)
@@ -102,12 +106,17 @@ class ProjectPaper(models.Model):
     paper = models.ForeignKey(Paper, on_delete=models.PROTECT, null=False)
 
 
+    def __str__(self):
+        return f"{self.id}-{self.paper.name[:20]}...-{self.list.name}"
+
+
 class Task(models.Model):
     name = models.CharField(max_length=256)
     start_date = models.DateTimeField(blank=True, null=True)
     due_date = models.DateTimeField(blank=True, null=True)
     status = models.CharField(max_length=128, default='Later', blank=True)
 
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False)
-    project_paper = models.ForeignKey(ProjectPaper, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False, related_name='tasks')
+    project_paper = models.ForeignKey(ProjectPaper, on_delete=models.CASCADE, 
+                                      related_name='tasks', null=True, blank=True)
     assignees = models.ManyToManyField(ProjectCollaborator, related_name='tasks')

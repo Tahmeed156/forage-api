@@ -9,10 +9,11 @@ from rest_framework.authtoken.views import obtain_auth_token
 router = DefaultRouter()
 router.register(r'papers', views.PaperViewset)
 router.register(r'projects', views.ProjectViewset, basename='Project')
-
+router.register(r'tasks', views.TaskViewset, basename='Task')
 
 project_router = NestedSimpleRouter(router, r'projects', lookup='project')
 project_router.register(r'lists', views.ProjectListViewset, basename='lists')
+project_router.register(r'collaborators', views.ProjectCollaboratorViewset, basename='collaborators')
 
 
 urlpatterns = [
@@ -22,6 +23,7 @@ urlpatterns = [
 
     path('extension/add-paper/', views.extension_add_paper, name='extension-add-paper'),
     path('extension/paper-to-project/', views.extension_paper_to_project, name='extension-paper-to-project'),
+    path('extension/collaborator-to-paper/', views.extension_collaborator_to_paper, name='extension-collaborator-to-paper'),
 
     path('admin/', admin.site.urls),
     path('auth/token/', obtain_auth_token)

@@ -1,9 +1,8 @@
 from rest_framework.decorators import api_view, action, authentication_classes, permission_classes
 from rest_framework import status, viewsets, mixins, exceptions
 from rest_framework.response import Response
-from api.models import Paper, Project, ProjectList, ProjectPaper
-from api.serializers import PaperSerializer, ProjectListSerializer, ProjectPaperSerializer, ProjectSerializer, UserSerializer
-
+from api.models import *
+from api.serializers import *
 
 @api_view(['POST'])
 def extension_add_paper(request):
@@ -46,8 +45,25 @@ def extension_paper_to_project(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-def extension_add_collaborator_to_paper():
-    pass
+@api_view(['POST'])
+def extension_collaborator_to_paper(request):
+    # TODO: Check whether collaborator in project
+    data = request.data
+
+    pp_instance = ProjectPaper.objects.get(id=data.get("ppid"))
+    pc_instance = ProjectCollaborator.objects.get(id=data.get("pcid"))
+
+    task = Task(
+        name='Read paper',
+        status='Next',
+        project=pp_instance.list.project,
+        project_paper=pp_instance,
+    )
+    task.save()
+    task.assignees.add(pc_instance)
+
+    serializer = TaskSerializer(task)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET'])    
@@ -84,13 +100,6 @@ class ProjectViewset(viewsets.GenericViewSet,
         return Project.get_user_projects(self.request.user)
 
 
-    @action(detail=True, methods=['GET'])
-    def collaborators(self, request, pk):
-        clb = Project.objects.get(id=pk).collaborators
-        serializer = UserSerializer(clb, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
 class ProjectListViewset(viewsets.GenericViewSet, 
                          mixins.ListModelMixin, 
                          mixins.RetrieveModelMixin):
@@ -110,3 +119,34 @@ class ProjectListViewset(viewsets.GenericViewSet,
         paper_instances = project_list_instance.paper_set.all()
         serializer = PaperSerializer(paper_instances, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ProjectCollaboratorViewset(viewsets.GenericViewSet, 
+                                 mixins.ListModelMixin, 
+                                 mixins.RetrieveModelMixin):
+    serializer_class = ProjectCollaboratorSerializer
+
+    def get_queryset(self):
+        return ProjectCollaborator.objects.filter(project_id=self.kwargs['project_pk'])
+
+    @action(detail=True, methods=['GET'])
+    def tasks(self, request, project_pk, pk):
+        project_clb_instance = ProjectCollaborator.objects.get(id=pk)
+
+        print(project_clb_instance.project_id, project_pk, pk)
+        if project_clb_instance.project_id != int(project_pk):
+            raise exceptions.PermissionDenied("Collaborator not in project")
+
+        task_instances = project_clb_instance.tasks.all()
+        serializer = TaskSerializer(task_instances, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class TaskViewset(viewsets.GenericViewSet,
+                  mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin):
+    serializer_class = TaskSerializer
+
+
+    def get_queryset(self):
+        return Task.objects.filter(assignees__collaborator__in=[self.request.user])
