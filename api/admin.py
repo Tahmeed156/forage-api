@@ -1,3 +1,12 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from api.models import *
 
-# Register your models here.
+admin.site.register(User, UserAdmin)
+admin.site.register(Paper)
+admin.site.register(Project)
+admin.site.register(ProjectCollaborator)
+admin.site.register(ProjectList)
+admin.site.register(ProjectPaper)
+admin.site.register(Task)
+
