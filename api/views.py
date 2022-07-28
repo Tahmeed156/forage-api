@@ -1,5 +1,5 @@
 from rest_framework.decorators import api_view, action, authentication_classes, permission_classes
-from rest_framework import status, viewsets, mixins, exceptions
+from rest_framework import status, viewsets, mixins, exceptions, filters
 from rest_framework.response import Response
 from api.models import *
 from api.serializers import *
@@ -78,6 +78,8 @@ class PaperViewset(viewsets.GenericViewSet,
                    mixins.RetrieveModelMixin):
     queryset = Paper.objects.all()
     serializer_class = PaperSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'authors']
 
 
     @action(detail=False, methods=['GET'])
@@ -146,6 +148,8 @@ class TaskViewset(viewsets.GenericViewSet,
                   mixins.ListModelMixin,
                   mixins.RetrieveModelMixin):
     serializer_class = TaskSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'project__name', 'project_paper__paper__name']
 
 
     def get_queryset(self):
