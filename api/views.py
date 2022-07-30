@@ -7,16 +7,27 @@ from api.serializers import *
 @api_view(['POST'])
 def extension_add_paper(request):
     data = request.data
-
+    print("HERE IS DATA : ", data, data.get('venue'));
     #  Search if paper currently exists, if not then create 
     paper = Paper.objects.filter(doi=data.get('doi')).first()
-    print(paper, data)
+    venue = Venue.objects.filter(name=data.get('venue')).first()
+
+    if not venue:
+        if data.get('venue_type') == 'conference':
+            venue = Conference(name=data.get('venue'), website=data.get('venue_website'))
+        # elif data.get('venue_type') == 'journal':
+        else:
+            venue = Journal(name=data.get('venue'), website=data.get('venue_website'))
+        venue.save()
+
+    print(paper, data, venue)
     if paper is None:
         paper = Paper(
             name=data.get('name'),
             doi=data.get('doi'),
             abstract=data.get('abstract'),
             authors=data.get('authors'),
+            venue=venue
         )
         paper.save()
 

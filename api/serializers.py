@@ -16,10 +16,18 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
                 self.fields.pop(field_name)
 
 
+class VenueSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Venue
+        fields = ('id', 'name', 'website')
+
+
 class PaperSerializer(DynamicFieldsModelSerializer):
+    venue = VenueSerializer(fields=['name'])
+
     class Meta:
         model = Paper
-        fields = ('id', 'name', 'doi', 'abstract', 'authors')
+        fields = ('id', 'name', 'doi', 'abstract', 'authors', 'venue')
 
 
 class UserSerializer(DynamicFieldsModelSerializer):
@@ -66,3 +74,15 @@ class TaskSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Task
         fields = ('id', 'name', 'status', 'start_date', 'due_date', 'assignees', 'project_paper', 'project')
+
+
+class ConferenceSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Conference
+        fields = VenueSerializer.Meta.fields + ('isbn',)
+
+
+class JournalSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Journal
+        fields = VenueSerializer.Meta.fields + ('issn',)
