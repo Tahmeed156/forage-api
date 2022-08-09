@@ -12,4 +12,6 @@ admin.site.register(Task)
 admin.site.register(Venue)
 admin.site.register(Conference)
 admin.site.register(Journal)
+admin.site.register(Keyword)
+admin.site.register(PaperKeyword)
 

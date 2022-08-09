@@ -89,6 +89,13 @@ class Venue(models.Model):
         return f"{self.id}-{self.name}"
 
         
+class Keyword(models.Model):
+    name = models.CharField(max_length=256)
+
+    def __str__(self):
+        return f"{self.id}-{self.name}"
+
+
 class Paper(models.Model):
     name = models.CharField(max_length=256)  # TODO: Add to ERD
     doi = models.CharField(max_length=256, null=True, blank=True, unique=True) 
@@ -101,9 +108,23 @@ class Paper(models.Model):
     
     lists = models.ManyToManyField(ProjectList, through='ProjectPaper')
 
+    # keywords:
+    keywords = models.ManyToManyField(Keyword, through='PaperKeyword')
+
 
     def __str__(self):
         return f"{self.id}-{self.name[:20]}..."
+
+
+class PaperKeyword(models.Model):
+    # TODO: change null to False
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=False)
+    keyword = models.ForeignKey(Keyword, on_delete=models.CASCADE, null=False)
+
+    def __str__(self):
+        return f"{self.id}-{self.paper.name}...-{self.keyword.name}"
+
+
 
 
 class ProjectPaper(models.Model):
