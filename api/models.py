@@ -116,10 +116,11 @@ class Note(models.Model):
         ProjectPaper,
         on_delete=models.CASCADE,
         primary_key=True,
-        related_name='note'
+        related_name='note',
+        db_column='id'
     )
-    # TODO: How to use creator_id?
-    creator_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    # TODO: How to use creator_id? Also fix `creator_id` to `creator`
+    creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     # NOTE: visibility choices = ['Private', 'Public']
     text = models.TextField(default='', blank=True)
     visibility = models.CharField(max_length=64, default='Private', blank=True)
