@@ -189,3 +189,27 @@ class TaskViewset(viewsets.ModelViewSet):
 
         else:
             raise exceptions.MethodNotAllowed()
+
+
+class NoteViewset(viewsets.GenericViewSet, 
+                  mixins.UpdateModelMixin, 
+                  mixins.RetrieveModelMixin,
+                  mixins.ListModelMixin):
+    serializer_class = NoteSerializer
+    filterset_fields = ['project_paper__paper']
+
+
+    def get_queryset(self):
+        # return Note.objects.filter(project_paper__list__project__collaborators__id=self.request.user.id)
+        return Note.objects.filter(visibility='Public')
+
+
+class ProjectPaperViewset(viewsets.GenericViewSet, 
+                         mixins.ListModelMixin, 
+                         mixins.RetrieveModelMixin):
+    serializer_class = ProjectPaperSerializer
+
+    def get_queryset(self):
+        return ProjectPaper.objects.filter(list__project__id=self.kwargs['project_pk'])
+
+
