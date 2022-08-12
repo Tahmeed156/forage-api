@@ -148,3 +148,43 @@ class TaskViewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Task.objects.filter(assignees__collaborator__in=[self.request.user])
+
+    
+    @action(detail=True, methods=['POST', 'DELETE'])
+    def depends_on(self, request, pk):
+        if request.method == 'POST':
+            # TODO: Validation
+
+            # Check if already exists
+            task_dep_instance = TaskDependency.objects.filter(
+                before_id=request.data.get('dep_id'),
+                after_id=pk
+            ).first()
+            if task_dep_instance is not None:
+                raise exceptions.APIException('Dependency already exists')
+
+            # Link dependency
+            task_dep_instance = TaskDependency(
+                before_id=request.data.get('dep_id'),
+                after_id=pk
+            )
+            task_dep_instance.save()
+
+            serializer = TaskDependencySerializer(task_dep_instance)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        elif request.method == 'DELETE':
+            # TODO: Validation
+
+            task_dep_instance = TaskDependency.objects.filter(
+                before_id=request.data.get('dep_id'),
+                after_id=pk
+            ).first()
+            if task_dep_instance is None:
+                raise exceptions.NotFound()
+            task_dep_instance.delete()
+
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        else:
+            raise exceptions.MethodNotAllowed()
