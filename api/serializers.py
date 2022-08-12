@@ -92,3 +92,14 @@ class TaskSerializer(DynamicFieldsModelSerializer):
         model = Task
         fields = ('id', 'name', 'status', 'start_date', 'due_date', 'project_paper', 'project', 
                   'depends_on', 'next', 'project_id', 'project_paper_id')
+
+
+class NoteSerializer(DynamicFieldsModelSerializer):
+    id = serializers.SerializerMethodField()
+
+    def get_id(self, instance):
+        return instance.project_paper_id
+
+    class Meta:
+        model = Note
+        fields = ('id', 'text', 'visibility', 'last_modified', 'creator', 'project_paper')
