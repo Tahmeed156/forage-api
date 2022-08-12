@@ -120,3 +120,8 @@ class Task(models.Model):
     project_paper = models.ForeignKey(ProjectPaper, on_delete=models.CASCADE, 
                                       related_name='tasks', null=True, blank=True)
     assignees = models.ManyToManyField(ProjectCollaborator, related_name='tasks')
+
+
+class TaskDependency(models.Model):
+    after = models.ForeignKey(Task, on_delete=models.CASCADE, null=False, related_name='depends_on')
+    before = models.ForeignKey(Task, on_delete=models.CASCADE, null=False, related_name='next')
