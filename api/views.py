@@ -147,7 +147,8 @@ class TaskViewset(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-        return Task.objects.filter(assignees__collaborator__in=[self.request.user])
+        print(self.request.user.id)
+        return Task.objects.filter(project__collaborators__id=self.request.user.id)
 
     
     @action(detail=True, methods=['POST', 'DELETE'])

@@ -81,6 +81,7 @@ class TaskDependencySerializer(DynamicFieldsModelSerializer):
 
 class TaskSerializer(DynamicFieldsModelSerializer):
     project_paper = ProjectPaperSerializer(fields=['id', 'paper'], read_only=True)
+    project_paper_id = serializers.IntegerField(write_only=True, allow_null=True)
     project = ProjectSerializer(fields=['id', 'name'], read_only=True)
     project_id = serializers.IntegerField(write_only=True)
 
@@ -90,4 +91,4 @@ class TaskSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Task
         fields = ('id', 'name', 'status', 'start_date', 'due_date', 'project_paper', 'project', 
-                  'depends_on', 'next', 'project_id')
+                  'depends_on', 'next', 'project_id', 'project_paper_id')
