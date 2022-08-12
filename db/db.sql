@@ -5,7 +5,7 @@
 -- Dumped from database version 12.5
 -- Dumped by pg_dump version 12.11 (Ubuntu 12.11-0ubuntu0.20.04.1)
 
--- Started on 2022-08-12 10:59:09 +06
+-- Started on 2022-08-12 12:37:24 +06
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -28,11 +28,11 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.api_note (
-    project_paper_id bigint NOT NULL,
     text text NOT NULL,
     visibility character varying(64) NOT NULL,
     last_modified timestamp with time zone NOT NULL,
-    creator_id_id bigint
+    creator_id bigint,
+    id bigint NOT NULL
 );
 
 
@@ -887,6 +887,8 @@ ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('p
 -- Data for Name: api_note; Type: TABLE DATA; Schema: public; Owner: user
 --
 
+INSERT INTO public.api_note VALUES ('Nice', 'Private', '2022-08-12 12:21:07.056822+06', NULL, 12);
+INSERT INTO public.api_note VALUES ('', 'Public', '2022-08-12 12:21:12.149364+06', NULL, 11);
 
 
 --
@@ -949,10 +951,8 @@ INSERT INTO public.api_projectlist VALUES (5, 'Default', false, 2);
 
 INSERT INTO public.api_projectpaper VALUES (1, '2022-07-10 13:46:45.088714+06', 3, 1);
 INSERT INTO public.api_projectpaper VALUES (3, '2022-07-15 09:20:40.879753+06', 5, 4);
-INSERT INTO public.api_projectpaper VALUES (6, '2022-07-31 14:37:19.605433+06', 5, 9);
-INSERT INTO public.api_projectpaper VALUES (7, '2022-07-31 14:37:32.020396+06', 5, 9);
-INSERT INTO public.api_projectpaper VALUES (8, '2022-07-31 14:37:46.497664+06', 5, 9);
-INSERT INTO public.api_projectpaper VALUES (9, '2022-07-31 14:37:53.949424+06', 5, 9);
+INSERT INTO public.api_projectpaper VALUES (11, '2022-08-12 11:52:53.76108+06', 4, 9);
+INSERT INTO public.api_projectpaper VALUES (12, '2022-08-12 11:53:08.23548+06', 3, 9);
 
 
 --
@@ -1161,6 +1161,17 @@ INSERT INTO public.django_admin_log VALUES (33, '2022-07-31 16:02:04.846943+06',
 INSERT INTO public.django_admin_log VALUES (34, '2022-07-31 16:02:46.891339+06', '6', 'Task object (6)', 2, '[{"changed": {"fields": ["Assignees"]}}]', 14, 1);
 INSERT INTO public.django_admin_log VALUES (35, '2022-08-12 09:45:04.304576+06', '8', '8-New task 1-Later', 3, '', 14, 1);
 INSERT INTO public.django_admin_log VALUES (36, '2022-08-12 09:45:09.358589+06', '9', '9-New task 1-Later', 3, '', 14, 1);
+INSERT INTO public.django_admin_log VALUES (37, '2022-08-12 11:20:58.978837+06', '7', '7-Distributed Double M...-Default', 3, '', 10, 1);
+INSERT INTO public.django_admin_log VALUES (38, '2022-08-12 11:21:12.100645+06', '10', '10-Distributed Double M...-Default', 1, '[{"added": {}}]', 10, 1);
+INSERT INTO public.django_admin_log VALUES (39, '2022-08-12 11:52:33.30207+06', '10', '10-Distributed Double M...-Default', 3, '', 10, 1);
+INSERT INTO public.django_admin_log VALUES (40, '2022-08-12 11:52:36.464947+06', '9', '9-Distributed Double M...-Default', 3, '', 10, 1);
+INSERT INTO public.django_admin_log VALUES (41, '2022-08-12 11:52:40.753032+06', '8', '8-Distributed Double M...-Default', 3, '', 10, 1);
+INSERT INTO public.django_admin_log VALUES (42, '2022-08-12 11:52:44.289285+06', '6', '6-Distributed Double M...-Default', 3, '', 10, 1);
+INSERT INTO public.django_admin_log VALUES (43, '2022-08-12 11:52:53.763439+06', '11', '11-Distributed Double M...-Done', 1, '[{"added": {}}]', 10, 1);
+INSERT INTO public.django_admin_log VALUES (44, '2022-08-12 11:53:08.237599+06', '12', '12-Distributed Double M...-Next', 1, '[{"added": {}}]', 10, 1);
+INSERT INTO public.django_admin_log VALUES (45, '2022-08-12 12:20:50.9749+06', '12', '12-Distributed Double M...-Next-Public', 2, '[{"changed": {"fields": ["Visibility"]}}]', 16, 1);
+INSERT INTO public.django_admin_log VALUES (46, '2022-08-12 12:21:07.064887+06', '12', '12-Distributed Double M...-Next-Private', 2, '[{"changed": {"fields": ["Visibility"]}}]', 16, 1);
+INSERT INTO public.django_admin_log VALUES (47, '2022-08-12 12:21:12.156398+06', '11', '11-Distributed Double M...-Done-Public', 2, '[{"changed": {"fields": ["Visibility"]}}]', 16, 1);
 
 
 --
@@ -1219,6 +1230,7 @@ INSERT INTO public.django_migrations VALUES (23, 'api', '0002_task', '2022-07-16
 INSERT INTO public.django_migrations VALUES (24, 'api', '0003_alter_task_project_alter_task_project_paper', '2022-07-16 10:26:19.493513+06');
 INSERT INTO public.django_migrations VALUES (25, 'api', '0004_taskdependency', '2022-07-31 15:08:07.563754+06');
 INSERT INTO public.django_migrations VALUES (27, 'api', '0005_note', '2022-08-12 10:57:26.008773+06');
+INSERT INTO public.django_migrations VALUES (29, 'api', '0006_rename_creator_id_note_creator_and_more', '2022-08-12 11:49:11.639296+06');
 
 
 --
@@ -1274,7 +1286,7 @@ SELECT pg_catalog.setval('public.api_projectlist_id_seq', 5, true);
 -- Name: api_projectpaper_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.api_projectpaper_id_seq', 9, true);
+SELECT pg_catalog.setval('public.api_projectpaper_id_seq', 12, true);
 
 
 --
@@ -1364,7 +1376,7 @@ SELECT pg_catalog.setval('public.auth_permission_id_seq', 64, true);
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 36, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 47, true);
 
 
 --
@@ -1382,16 +1394,16 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 16, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 27, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 29, true);
 
 
 --
--- TOC entry 3043 (class 2606 OID 16725)
+-- TOC entry 3043 (class 2606 OID 16770)
 -- Name: api_note api_note_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
 ALTER TABLE ONLY public.api_note
-    ADD CONSTRAINT api_note_pkey PRIMARY KEY (project_paper_id);
+    ADD CONSTRAINT api_note_pkey PRIMARY KEY (id);
 
 
 --
@@ -1660,7 +1672,7 @@ ALTER TABLE ONLY public.django_session
 -- Name: api_note_creator_id_id_394e6615; Type: INDEX; Schema: public; Owner: user
 --
 
-CREATE INDEX api_note_creator_id_id_394e6615 ON public.api_note USING btree (creator_id_id);
+CREATE INDEX api_note_creator_id_id_394e6615 ON public.api_note USING btree (creator_id);
 
 
 --
@@ -1872,21 +1884,21 @@ CREATE INDEX django_session_session_key_c0390e0f_like ON public.django_session U
 
 
 --
--- TOC entry 3066 (class 2606 OID 16731)
--- Name: api_note api_note_creator_id_id_394e6615_fk_api_user_id; Type: FK CONSTRAINT; Schema: public; Owner: user
+-- TOC entry 3065 (class 2606 OID 16781)
+-- Name: api_note api_note_creator_id_ef904ef3_fk_api_user_id; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
 ALTER TABLE ONLY public.api_note
-    ADD CONSTRAINT api_note_creator_id_id_394e6615_fk_api_user_id FOREIGN KEY (creator_id_id) REFERENCES public.api_user(id) DEFERRABLE INITIALLY DEFERRED;
+    ADD CONSTRAINT api_note_creator_id_ef904ef3_fk_api_user_id FOREIGN KEY (creator_id) REFERENCES public.api_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
--- TOC entry 3065 (class 2606 OID 16726)
--- Name: api_note api_note_project_paper_id_92235888_fk_api_projectpaper_id; Type: FK CONSTRAINT; Schema: public; Owner: user
+-- TOC entry 3066 (class 2606 OID 16786)
+-- Name: api_note api_note_id_b72fdfc9_fk_api_projectpaper_id; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
 ALTER TABLE ONLY public.api_note
-    ADD CONSTRAINT api_note_project_paper_id_92235888_fk_api_projectpaper_id FOREIGN KEY (project_paper_id) REFERENCES public.api_projectpaper(id) DEFERRABLE INITIALLY DEFERRED;
+    ADD CONSTRAINT api_note_id_b72fdfc9_fk_api_projectpaper_id FOREIGN KEY (id) REFERENCES public.api_projectpaper(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -2078,7 +2090,7 @@ ALTER TABLE ONLY public.django_admin_log
     ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk_api_user_id FOREIGN KEY (user_id) REFERENCES public.api_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- Completed on 2022-08-12 10:59:10 +06
+-- Completed on 2022-08-12 12:37:25 +06
 
 --
 -- PostgreSQL database dump complete
