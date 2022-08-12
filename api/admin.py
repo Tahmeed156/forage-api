@@ -9,4 +9,4 @@ admin.site.register(ProjectCollaborator)
 admin.site.register(ProjectList)
 admin.site.register(ProjectPaper)
 admin.site.register(Task)
-
+admin.site.register(TaskDependency)
