@@ -195,8 +195,10 @@ class NoteViewset(viewsets.GenericViewSet,
                   mixins.UpdateModelMixin, 
                   mixins.ListModelMixin):
     serializer_class = NoteSerializer
+    filterset_fields = ['project_paper__paper']
 
 
     def get_queryset(self):
-        print(self.request.user.id)
-        return Note.objects.filter(project_paper__list__project__collaborators__id=self.request.user.id)
+        # return Note.objects.filter(project_paper__list__project__collaborators__id=self.request.user.id)
+        return Note.objects.filter(visibility='Public')
+
