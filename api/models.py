@@ -118,15 +118,27 @@ class Note(models.Model):
         primary_key=True,
         related_name='note'
     )
+    # TODO: How to use creator_id?
     creator_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     # NOTE: visibility choices = ['Private', 'Public']
     text = models.TextField(default='', blank=True)
     visibility = models.CharField(max_length=64, default='Private', blank=True)
     last_modified = models.DateTimeField(auto_now_add=True, blank=True)
 
+
     def save(self, *args, **kwargs):
         self.last_modified = datetime.now()
         super(Note, self).save(*args, **kwargs)
+
+
+    def __str__(self):
+        return f"{str(self.project_paper)}-{self.visibility}"
+
+
+@receiver(post_save, sender=ProjectPaper)
+def create_project_paper_note(sender, instance, created, **kwargs):
+    if created:
+        Note.objects.create(project_paper=instance)
 
 
 class Task(models.Model):
