@@ -142,9 +142,7 @@ class ProjectCollaboratorViewset(viewsets.GenericViewSet,
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class TaskViewset(viewsets.GenericViewSet,
-                  mixins.ListModelMixin,
-                  mixins.RetrieveModelMixin):
+class TaskViewset(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
 
 
