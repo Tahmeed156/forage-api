@@ -165,7 +165,7 @@ class SubmissionCommentSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = SubmissionComment
-        fields = ('id', 'user', 'text', 'submission_id', 'reviewer_thread')
+        fields = ('id', 'user', 'text', 'submission_id', 'reviewer_thread', 'datetime')
 
 
 class SubmissionSerializer(DynamicFieldsModelSerializer):
