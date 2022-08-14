@@ -7,7 +7,7 @@ from api.serializers import *
 @api_view(['POST'])
 def extension_add_paper(request):
     data = request.data
-    print("HERE IS DATA : ", data, data.get('venue'));
+
     #  Search if paper currently exists, if not then create 
     paper = Paper.objects.filter(doi=data.get('doi')).first()
     venue = Venue.objects.filter(name=data.get('venue')).first()
@@ -20,7 +20,6 @@ def extension_add_paper(request):
             venue = Journal(name=data.get('venue'), website=data.get('venue_website'))
         venue.save()
 
-    print(paper, data, venue)
     if paper is None:
         paper = Paper(
             name=data.get('name'),
@@ -30,6 +29,16 @@ def extension_add_paper(request):
             venue=venue
         )
         paper.save()
+
+    # Add keywords to paper
+    if data.get('keywords'):
+        for k in data.get('keywords'):
+            k = k.lower()
+            keyword, created = Keyword.objects.get_or_create(name=k)
+            if created:
+                keyword.save()
+            paper.keywords.add(keyword)
+            paper.save()
 
     # Add to default project i.e. unsorted (for that user)
     project = Project.get_default_project(request.user)

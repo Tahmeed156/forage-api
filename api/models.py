@@ -83,8 +83,21 @@ class ProjectList(models.Model):  # FIXME: Change name
 
 
 class Venue(models.Model):
+    # TODO: Date published
     name = models.CharField(max_length=256)
     website = models.CharField(max_length=256, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.id}-{self.name}"
+
+
+class Keyword(models.Model):
+    name = models.CharField(max_length=128, unique=True)
+
+
+    def save(self, *args, **kwargs):
+        self.name = self.name.lower()
+ 
 
     def __str__(self):
         return f"{self.id}-{self.name}"
@@ -96,10 +109,9 @@ class Paper(models.Model):
     # FIXME: list_id not required
     abstract = models.TextField(default="", blank=True)
     authors = models.CharField(max_length=1024)
-    # TODO: Date published
-    # TODO: Conference / Journal
+
+    keywords = models.ManyToManyField(Keyword)
     venue = models.ForeignKey(Venue, on_delete=models.PROTECT, null=True)
-    
     lists = models.ManyToManyField(ProjectList, through='ProjectPaper')
 
 

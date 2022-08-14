@@ -23,11 +23,14 @@ class VenueSerializer(DynamicFieldsModelSerializer):
 
 
 class PaperSerializer(DynamicFieldsModelSerializer):
-    venue = VenueSerializer(fields=['name'])
+    venue = serializers.SlugRelatedField(read_only=True, slug_field='name')
+    venue_id = serializers.IntegerField(write_only=True)
+    keywords = serializers.SlugRelatedField(read_only=True, slug_field='name', many=True)
+
 
     class Meta:
         model = Paper
-        fields = ('id', 'name', 'doi', 'abstract', 'authors', 'venue')
+        fields = ('id', 'name', 'doi', 'abstract', 'authors', 'venue', 'venue_id', 'keywords')
 
 
 class UserSerializer(DynamicFieldsModelSerializer):
