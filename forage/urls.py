@@ -9,18 +9,24 @@ from rest_framework.authtoken.views import obtain_auth_token
 router = DefaultRouter()
 router.register(r'papers', views.PaperViewset)
 router.register(r'projects', views.ProjectViewset, basename='Project')
+router.register(r'submissions', views.SubmissionViewset, basename='Submission')
 router.register(r'tasks', views.TaskViewset, basename='Task')
 router.register(r'notes', views.NoteViewset, basename='Note')
+router.register(r'venues', views.VenueViewset, basename='Venue')
 
-project_router = NestedSimpleRouter(router, r'projects', lookup='project')
+project_router = NestedSimpleRouter(router, r'projects', lookup='projects')
 project_router.register(r'lists', views.ProjectListViewset, basename='lists')
 project_router.register(r'collaborators', views.ProjectCollaboratorViewset, basename='collaborators')
 project_router.register(r'papers', views.ProjectPaperViewset, basename='papers')
+
+submission_router = NestedSimpleRouter(router, r'submissions', lookup='submissions')
+submission_router.register(r'comments', views.SubmissionCommentViewset, basename='comments')
 
 
 urlpatterns = [
     path('api/', include(router.urls)),
     path('api/', include(project_router.urls)),
+    path('api/', include(submission_router.urls)),
     path('api/test/', views.test_api, name='test-api'),
 
     path('extension/add-paper/', views.extension_add_paper, name='extension-add-paper'),
