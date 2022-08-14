@@ -239,3 +239,20 @@ class ProjectPaperViewset(viewsets.GenericViewSet,
         return ProjectPaper.objects.filter(list__project__id=self.kwargs['project_pk'])
 
 
+class VenueViewset(viewsets.GenericViewSet, 
+                   mixins.ListModelMixin,
+                   mixins.RetrieveModelMixin):
+    serializer_class = VenueSerializer
+    queryset = Venue.objects.all()
+
+
+class SubmissionViewset(viewsets.GenericViewSet, 
+                        mixins.ListModelMixin, 
+                        mixins.RetrieveModelMixin):
+    serializer_class = SubmissionSerializer
+    filterset_fields = ['project']
+
+
+    def get_queryset(self):
+        return Submission.objects.filter(project__collaborators__id=self.request.user.id)
+

@@ -16,12 +16,6 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
                 self.fields.pop(field_name)
 
 
-class VenueSerializer(DynamicFieldsModelSerializer):
-    class Meta:
-        model = Venue
-        fields = ('id', 'name', 'website')
-
-
 class PaperSerializer(DynamicFieldsModelSerializer):
     venue = serializers.SlugRelatedField(read_only=True, slug_field='name')
     venue_id = serializers.IntegerField(write_only=True)
@@ -140,6 +134,15 @@ class NoteSerializer(DynamicFieldsModelSerializer):
         model = Note
         fields = ('id', 'text', 'visibility', 'last_modified', 'creator', 'project_paper')
 
+
+class VenueSerializer(DynamicFieldsModelSerializer):
+    reviewers = UserSerializer(fields=['id', 'username'], many=True)
+
+    class Meta:
+        model = Venue
+        fields = ('id', 'name', 'website', 'reviewers')
+
+
 class ConferenceSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Conference
@@ -150,3 +153,11 @@ class JournalSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Journal
         fields = VenueSerializer.Meta.fields + ('issn',)
+class SubmissionSerializer(DynamicFieldsModelSerializer):
+    project = ProjectSerializer(fields=['id', 'name'], read_only=True)
+    venue = VenueSerializer(fields=['id', 'name'], read_only=True)
+    comments = SubmissionCommentSerializer(fields=['id', 'user', 'text'], read_only=True, many=True)
+
+    class Meta:
+        model = Submission
+        fields = ('project', 'venue', 'status', 'submitted', 'comments')
