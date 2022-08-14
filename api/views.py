@@ -220,12 +220,14 @@ class NoteViewset(viewsets.GenericViewSet,
                   mixins.RetrieveModelMixin,
                   mixins.ListModelMixin):
     serializer_class = NoteSerializer
+    queryset = Note.objects.all()
     filterset_fields = ['project_paper__paper']
 
-
-    def get_queryset(self):
-        # return Note.objects.filter(project_paper__list__project__collaborators__id=self.request.user.id)
-        return Note.objects.filter(visibility='Public')
+    # TODO: Add API for public notes under paper
+    # TODO: Restrict update to only user notes (not any/public notes)
+    # def get_queryset(self):
+    #     # return Note.objects.filter(project_paper__list__project__collaborators__id=self.request.user.id)
+    #     return Note.objects.filter(visibility='Public')
 
 
 class ProjectPaperViewset(viewsets.GenericViewSet, 
