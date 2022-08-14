@@ -1,5 +1,5 @@
 from rest_framework.decorators import api_view, action, authentication_classes, permission_classes
-from rest_framework import status, viewsets, mixins, exceptions
+from rest_framework import status, viewsets, mixins, exceptions, filters
 from rest_framework.response import Response
 from api.models import *
 from api.serializers import *
@@ -10,15 +10,35 @@ def extension_add_paper(request):
 
     #  Search if paper currently exists, if not then create 
     paper = Paper.objects.filter(doi=data.get('doi')).first()
-    print(paper, data)
+    venue = Venue.objects.filter(name=data.get('venue')).first()
+
+    if not venue:
+        if data.get('venue_type') == 'conference':
+            venue = Conference(name=data.get('venue'), website=data.get('venue_website'))
+        # elif data.get('venue_type') == 'journal':
+        else:
+            venue = Journal(name=data.get('venue'), website=data.get('venue_website'))
+        venue.save()
+
     if paper is None:
         paper = Paper(
             name=data.get('name'),
             doi=data.get('doi'),
             abstract=data.get('abstract'),
             authors=data.get('authors'),
+            venue=venue
         )
         paper.save()
+
+    # Add keywords to paper
+    if data.get('keywords'):
+        for k in data.get('keywords'):
+            k = k.lower()
+            keyword, created = Keyword.objects.get_or_create(name=k)
+            if created:
+                keyword.save()
+            paper.keywords.add(keyword)
+            paper.save()
 
     # Add to default project i.e. unsorted (for that user)
     project = Project.get_default_project(request.user)
@@ -78,6 +98,8 @@ class PaperViewset(viewsets.GenericViewSet,
                    mixins.RetrieveModelMixin):
     queryset = Paper.objects.all()
     serializer_class = PaperSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'authors']
 
 
     @action(detail=False, methods=['GET'])
@@ -144,6 +166,8 @@ class ProjectCollaboratorViewset(viewsets.GenericViewSet,
 
 class TaskViewset(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'project__name', 'project_paper__paper__name']
 
 
     def get_queryset(self):

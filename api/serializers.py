@@ -16,10 +16,21 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
                 self.fields.pop(field_name)
 
 
+class VenueSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Venue
+        fields = ('id', 'name', 'website')
+
+
 class PaperSerializer(DynamicFieldsModelSerializer):
+    venue = serializers.SlugRelatedField(read_only=True, slug_field='name')
+    venue_id = serializers.IntegerField(write_only=True)
+    keywords = serializers.SlugRelatedField(read_only=True, slug_field='name', many=True)
+
+
     class Meta:
         model = Paper
-        fields = ('id', 'name', 'doi', 'abstract', 'authors')
+        fields = ('id', 'name', 'doi', 'abstract', 'authors', 'venue', 'venue_id', 'keywords')
 
 
 class UserSerializer(DynamicFieldsModelSerializer):
@@ -103,3 +114,14 @@ class NoteSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Note
         fields = ('id', 'text', 'visibility', 'last_modified', 'creator', 'project_paper')
+
+class ConferenceSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Conference
+        fields = VenueSerializer.Meta.fields + ('isbn',)
+
+
+class JournalSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Journal
+        fields = VenueSerializer.Meta.fields + ('issn',)

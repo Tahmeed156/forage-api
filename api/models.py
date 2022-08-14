@@ -82,15 +82,36 @@ class ProjectList(models.Model):  # FIXME: Change name
         return f"{self.name}-{self.project.name}"
 
 
+class Venue(models.Model):
+    # TODO: Date published
+    name = models.CharField(max_length=256)
+    website = models.CharField(max_length=256, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.id}-{self.name}"
+
+
+class Keyword(models.Model):
+    name = models.CharField(max_length=128, unique=True)
+
+
+    def save(self, *args, **kwargs):
+        self.name = self.name.lower()
+ 
+
+    def __str__(self):
+        return f"{self.id}-{self.name}"
+
+        
 class Paper(models.Model):
     name = models.CharField(max_length=256)  # TODO: Add to ERD
     doi = models.CharField(max_length=256, null=True, blank=True, unique=True) 
     # FIXME: list_id not required
     abstract = models.TextField(default="", blank=True)
     authors = models.CharField(max_length=1024)
-    # TODO: Date published
-    # TODO: Conference / Journal
-    
+
+    keywords = models.ManyToManyField(Keyword)
+    venue = models.ForeignKey(Venue, on_delete=models.PROTECT, null=True)
     lists = models.ManyToManyField(ProjectList, through='ProjectPaper')
 
 
@@ -164,3 +185,13 @@ class TaskDependency(models.Model):
 
     def __str__(self):
         return f"{self.before.id}-{self.before.name}-{self.after.id}-{self.after.name}"
+
+
+
+class Conference(Venue):
+    # TODO: how to handle same conf of different years?
+    isbn = models.CharField(max_length=256, null=True, blank=True)
+
+
+class Journal(Venue):
+    issn = models.CharField(max_length=256, null=True, blank=True)
