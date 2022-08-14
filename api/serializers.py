@@ -81,9 +81,32 @@ class DependentTaskSerializer(DynamicFieldsModelSerializer):
         fields = ('name', 'project_paper')
 
 
-class TaskDependencySerializer(DynamicFieldsModelSerializer):
-    before = serializers.SlugRelatedField(read_only=True, slug_field='name')
-    after = serializers.SlugRelatedField(read_only=True, slug_field='name')
+class BeforeTaskSerializer(DynamicFieldsModelSerializer):
+    before = serializers.SerializerMethodField()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        return data.get('before')
+
+    def get_before(self, instance):
+        from api.serializers import TaskSerializer
+        return TaskSerializer(instance.before, fields=['id', 'name']).data
+
+    class Meta:
+        model = TaskDependency
+        fields = ('before', 'after')
+
+
+class AfterTaskSerializer(DynamicFieldsModelSerializer):
+    after = serializers.SerializerMethodField()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        return data.get('after')
+
+    def get_after(self, instance):
+        from api.serializers import TaskSerializer
+        return TaskSerializer(instance.after, fields=['id', 'name']).data
 
     class Meta:
         model = TaskDependency
@@ -96,8 +119,8 @@ class TaskSerializer(DynamicFieldsModelSerializer):
     project = ProjectSerializer(fields=['id', 'name'], read_only=True)
     project_id = serializers.IntegerField(write_only=True)
 
-    depends_on = TaskDependencySerializer(fields=['before'], read_only=True, many=True)
-    next = TaskDependencySerializer(fields=['after'], read_only=True, many=True)
+    depends_on = BeforeTaskSerializer(fields=['before'], read_only=True, many=True)
+    next = AfterTaskSerializer(fields=['after'], read_only=True, many=True)
 
     class Meta:
         model = Task
