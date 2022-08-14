@@ -209,7 +209,7 @@ class Submission(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False)
     venue = models.ForeignKey(Venue, on_delete=models.PROTECT, null=True)
     status = models.CharField(max_length=128, blank=True)
-    submitted = models.DateTimeField(null=True, blank=True)
+    submitted = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 
     def __str__(self):
         return f"{self.id}-{self.project.name}-{self.venue.name}"
@@ -217,7 +217,9 @@ class Submission(models.Model):
 
 class SubmissionComment(models.Model):
     # Type (Author/Reviewer)
-    user = models.ForeignKey(User, on_delete=models.PROTECT, null=False)
+    submission = models.ForeignKey(Submission, on_delete=models.PROTECT, null=True)
+    reviewer_thread = models.ForeignKey(User, on_delete=models.PROTECT, related_name=None)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='submission_comments')
     text = models.TextField()
 
     def __str__(self):
