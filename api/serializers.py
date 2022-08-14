@@ -153,6 +153,21 @@ class JournalSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Journal
         fields = VenueSerializer.Meta.fields + ('issn',)
+
+
+class SubmissionCommentSerializer(DynamicFieldsModelSerializer):
+    user = UserSerializer(fields=['id', 'name'], read_only=True)
+    submission_id = serializers.IntegerField(write_only=True)
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context.get('request').user
+        return super().create(validated_data)
+
+    class Meta:
+        model = SubmissionComment
+        fields = ('id', 'user', 'text', 'submission_id', 'reviewer_thread')
+
+
 class SubmissionSerializer(DynamicFieldsModelSerializer):
     project = ProjectSerializer(fields=['id', 'name'], read_only=True)
     venue = VenueSerializer(fields=['id', 'name'], read_only=True)

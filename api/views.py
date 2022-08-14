@@ -128,7 +128,7 @@ class ProjectListViewset(viewsets.GenericViewSet,
     serializer_class = ProjectListSerializer
 
     def get_queryset(self):
-        return ProjectList.objects.filter(project_id=self.kwargs['project_pk'])
+        return ProjectList.objects.filter(project_id=self.kwargs['projects_pk'])
 
     @action(detail=True, methods=['GET'])
     def papers(self, request, project_pk, pk):
@@ -149,7 +149,7 @@ class ProjectCollaboratorViewset(viewsets.GenericViewSet,
     serializer_class = ProjectCollaboratorSerializer
 
     def get_queryset(self):
-        return ProjectCollaborator.objects.filter(project_id=self.kwargs['project_pk'])
+        return ProjectCollaborator.objects.filter(project_id=self.kwargs['projects_pk'])
 
     @action(detail=True, methods=['GET'])
     def tasks(self, request, project_pk, pk):
@@ -171,7 +171,6 @@ class TaskViewset(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-        print(self.request.user.id)
         return Task.objects.filter(project__collaborators__id=self.request.user.id)
 
     
@@ -236,7 +235,7 @@ class ProjectPaperViewset(viewsets.GenericViewSet,
     serializer_class = ProjectPaperSerializer
 
     def get_queryset(self):
-        return ProjectPaper.objects.filter(list__project__id=self.kwargs['project_pk'])
+        return ProjectPaper.objects.filter(list__project__id=self.kwargs['projects_pk'])
 
 
 class VenueViewset(viewsets.GenericViewSet, 
@@ -256,3 +255,12 @@ class SubmissionViewset(viewsets.GenericViewSet,
     def get_queryset(self):
         return Submission.objects.filter(project__collaborators__id=self.request.user.id)
 
+
+class SubmissionCommentViewset(viewsets.GenericViewSet, 
+                               mixins.ListModelMixin, 
+                               mixins.CreateModelMixin, 
+                               mixins.RetrieveModelMixin):
+    serializer_class = SubmissionCommentSerializer
+
+    def get_queryset(self):
+        return SubmissionComment.objects.filter(submission_id=self.kwargs['submissions_pk'])

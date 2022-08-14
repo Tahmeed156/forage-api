@@ -14,12 +14,14 @@ router.register(r'tasks', views.TaskViewset, basename='Task')
 router.register(r'notes', views.NoteViewset, basename='Note')
 router.register(r'venues', views.VenueViewset, basename='Venue')
 
-project_router = NestedSimpleRouter(router, r'projects', lookup='project')
+project_router = NestedSimpleRouter(router, r'projects', lookup='projects')
 project_router.register(r'lists', views.ProjectListViewset, basename='lists')
 project_router.register(r'collaborators', views.ProjectCollaboratorViewset, basename='collaborators')
 project_router.register(r'papers', views.ProjectPaperViewset, basename='papers')
 
 submission_router = NestedSimpleRouter(router, r'submissions', lookup='submissions')
+submission_router.register(r'comments', views.SubmissionCommentViewset, basename='comments')
+
 
 urlpatterns = [
     path('api/', include(router.urls)),

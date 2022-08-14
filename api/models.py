@@ -217,7 +217,7 @@ class Submission(models.Model):
 
 class SubmissionComment(models.Model):
     # Type (Author/Reviewer)
-    submission = models.ForeignKey(Submission, on_delete=models.PROTECT, null=True)
+    submission = models.ForeignKey(Submission, on_delete=models.PROTECT, null=True, related_name='comments')
     reviewer_thread = models.ForeignKey(User, on_delete=models.PROTECT, related_name=None)
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='submission_comments')
     text = models.TextField()
