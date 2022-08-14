@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from forage import settings
@@ -119,6 +120,37 @@ class ProjectPaper(models.Model):
         return f"{self.id}-{self.paper.name[:20]}...-{self.list.name}"
 
 
+class Note(models.Model):
+    project_paper = models.OneToOneField(
+        ProjectPaper,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        related_name='note',
+        db_column='id'
+    )
+    # TODO: How to use creator_id? Also fix `creator_id` to `creator`
+    creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    # NOTE: visibility choices = ['Private', 'Public']
+    text = models.TextField(default='', blank=True)
+    visibility = models.CharField(max_length=64, default='Private', blank=True)
+    last_modified = models.DateTimeField(auto_now_add=True, blank=True)
+
+
+    def save(self, *args, **kwargs):
+        self.last_modified = datetime.now()
+        super(Note, self).save(*args, **kwargs)
+
+
+    def __str__(self):
+        return f"{str(self.project_paper)}-{self.visibility}"
+
+
+@receiver(post_save, sender=ProjectPaper)
+def create_project_paper_note(sender, instance, created, **kwargs):
+    if created:
+        Note.objects.create(project_paper=instance)
+
+
 class Task(models.Model):
     name = models.CharField(max_length=256)
     start_date = models.DateTimeField(blank=True, null=True)
@@ -129,6 +161,18 @@ class Task(models.Model):
     project_paper = models.ForeignKey(ProjectPaper, on_delete=models.CASCADE, 
                                       related_name='tasks', null=True, blank=True)
     assignees = models.ManyToManyField(ProjectCollaborator, related_name='tasks')
+
+
+    def __str__(self):
+        return f"{self.id}-{self.name}-{self.status}"
+
+
+class TaskDependency(models.Model):
+    after = models.ForeignKey(Task, on_delete=models.CASCADE, null=False, related_name='depends_on')
+    before = models.ForeignKey(Task, on_delete=models.CASCADE, null=False, related_name='next')
+
+    def __str__(self):
+        return f"{self.before.id}-{self.before.name}-{self.after.id}-{self.after.name}"
 
 
 

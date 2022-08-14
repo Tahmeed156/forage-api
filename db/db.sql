@@ -5,7 +5,7 @@
 -- Dumped from database version 12.5
 -- Dumped by pg_dump version 12.11 (Ubuntu 12.11-0ubuntu0.20.04.1)
 
--- Started on 2022-07-16 11:10:38 +06
+-- Started on 2022-08-12 12:37:24 +06
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -23,7 +23,23 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 219 (class 1259 OID 16489)
+-- TOC entry 238 (class 1259 OID 16718)
+-- Name: api_note; Type: TABLE; Schema: public; Owner: user
+--
+
+CREATE TABLE public.api_note (
+    text text NOT NULL,
+    visibility character varying(64) NOT NULL,
+    last_modified timestamp with time zone NOT NULL,
+    creator_id bigint,
+    id bigint NOT NULL
+);
+
+
+ALTER TABLE public.api_note OWNER TO "user";
+
+--
+-- TOC entry 202 (class 1259 OID 16385)
 -- Name: api_paper; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -39,7 +55,7 @@ CREATE TABLE public.api_paper (
 ALTER TABLE public.api_paper OWNER TO "user";
 
 --
--- TOC entry 218 (class 1259 OID 16487)
+-- TOC entry 203 (class 1259 OID 16391)
 -- Name: api_paper_id_seq; Type: SEQUENCE; Schema: public; Owner: user
 --
 
@@ -54,8 +70,8 @@ CREATE SEQUENCE public.api_paper_id_seq
 ALTER TABLE public.api_paper_id_seq OWNER TO "user";
 
 --
--- TOC entry 3209 (class 0 OID 0)
--- Dependencies: 218
+-- TOC entry 3235 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: api_paper_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
 --
 
@@ -63,7 +79,7 @@ ALTER SEQUENCE public.api_paper_id_seq OWNED BY public.api_paper.id;
 
 
 --
--- TOC entry 221 (class 1259 OID 16502)
+-- TOC entry 204 (class 1259 OID 16393)
 -- Name: api_project; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -79,7 +95,7 @@ CREATE TABLE public.api_project (
 ALTER TABLE public.api_project OWNER TO "user";
 
 --
--- TOC entry 220 (class 1259 OID 16500)
+-- TOC entry 205 (class 1259 OID 16399)
 -- Name: api_project_id_seq; Type: SEQUENCE; Schema: public; Owner: user
 --
 
@@ -94,8 +110,8 @@ CREATE SEQUENCE public.api_project_id_seq
 ALTER TABLE public.api_project_id_seq OWNER TO "user";
 
 --
--- TOC entry 3210 (class 0 OID 0)
--- Dependencies: 220
+-- TOC entry 3236 (class 0 OID 0)
+-- Dependencies: 205
 -- Name: api_project_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
 --
 
@@ -103,7 +119,7 @@ ALTER SEQUENCE public.api_project_id_seq OWNED BY public.api_project.id;
 
 
 --
--- TOC entry 227 (class 1259 OID 16529)
+-- TOC entry 206 (class 1259 OID 16401)
 -- Name: api_projectcollaborator; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -118,7 +134,7 @@ CREATE TABLE public.api_projectcollaborator (
 ALTER TABLE public.api_projectcollaborator OWNER TO "user";
 
 --
--- TOC entry 226 (class 1259 OID 16527)
+-- TOC entry 207 (class 1259 OID 16404)
 -- Name: api_projectcollaborator_id_seq; Type: SEQUENCE; Schema: public; Owner: user
 --
 
@@ -133,8 +149,8 @@ CREATE SEQUENCE public.api_projectcollaborator_id_seq
 ALTER TABLE public.api_projectcollaborator_id_seq OWNER TO "user";
 
 --
--- TOC entry 3211 (class 0 OID 0)
--- Dependencies: 226
+-- TOC entry 3237 (class 0 OID 0)
+-- Dependencies: 207
 -- Name: api_projectcollaborator_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
 --
 
@@ -142,7 +158,7 @@ ALTER SEQUENCE public.api_projectcollaborator_id_seq OWNED BY public.api_project
 
 
 --
--- TOC entry 223 (class 1259 OID 16513)
+-- TOC entry 208 (class 1259 OID 16406)
 -- Name: api_projectlist; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -157,7 +173,7 @@ CREATE TABLE public.api_projectlist (
 ALTER TABLE public.api_projectlist OWNER TO "user";
 
 --
--- TOC entry 222 (class 1259 OID 16511)
+-- TOC entry 209 (class 1259 OID 16409)
 -- Name: api_projectlist_id_seq; Type: SEQUENCE; Schema: public; Owner: user
 --
 
@@ -172,8 +188,8 @@ CREATE SEQUENCE public.api_projectlist_id_seq
 ALTER TABLE public.api_projectlist_id_seq OWNER TO "user";
 
 --
--- TOC entry 3212 (class 0 OID 0)
--- Dependencies: 222
+-- TOC entry 3238 (class 0 OID 0)
+-- Dependencies: 209
 -- Name: api_projectlist_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
 --
 
@@ -181,7 +197,7 @@ ALTER SEQUENCE public.api_projectlist_id_seq OWNED BY public.api_projectlist.id;
 
 
 --
--- TOC entry 225 (class 1259 OID 16521)
+-- TOC entry 210 (class 1259 OID 16411)
 -- Name: api_projectpaper; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -196,7 +212,7 @@ CREATE TABLE public.api_projectpaper (
 ALTER TABLE public.api_projectpaper OWNER TO "user";
 
 --
--- TOC entry 224 (class 1259 OID 16519)
+-- TOC entry 211 (class 1259 OID 16414)
 -- Name: api_projectpaper_id_seq; Type: SEQUENCE; Schema: public; Owner: user
 --
 
@@ -211,8 +227,8 @@ CREATE SEQUENCE public.api_projectpaper_id_seq
 ALTER TABLE public.api_projectpaper_id_seq OWNER TO "user";
 
 --
--- TOC entry 3213 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3239 (class 0 OID 0)
+-- Dependencies: 211
 -- Name: api_projectpaper_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
 --
 
@@ -220,7 +236,7 @@ ALTER SEQUENCE public.api_projectpaper_id_seq OWNED BY public.api_projectpaper.i
 
 
 --
--- TOC entry 233 (class 1259 OID 16645)
+-- TOC entry 212 (class 1259 OID 16416)
 -- Name: api_task; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -238,7 +254,7 @@ CREATE TABLE public.api_task (
 ALTER TABLE public.api_task OWNER TO "user";
 
 --
--- TOC entry 235 (class 1259 OID 16653)
+-- TOC entry 213 (class 1259 OID 16419)
 -- Name: api_task_assignees; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -252,7 +268,7 @@ CREATE TABLE public.api_task_assignees (
 ALTER TABLE public.api_task_assignees OWNER TO "user";
 
 --
--- TOC entry 234 (class 1259 OID 16651)
+-- TOC entry 214 (class 1259 OID 16422)
 -- Name: api_task_assignees_id_seq; Type: SEQUENCE; Schema: public; Owner: user
 --
 
@@ -267,8 +283,8 @@ CREATE SEQUENCE public.api_task_assignees_id_seq
 ALTER TABLE public.api_task_assignees_id_seq OWNER TO "user";
 
 --
--- TOC entry 3214 (class 0 OID 0)
--- Dependencies: 234
+-- TOC entry 3240 (class 0 OID 0)
+-- Dependencies: 214
 -- Name: api_task_assignees_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
 --
 
@@ -276,7 +292,7 @@ ALTER SEQUENCE public.api_task_assignees_id_seq OWNED BY public.api_task_assigne
 
 
 --
--- TOC entry 232 (class 1259 OID 16643)
+-- TOC entry 215 (class 1259 OID 16424)
 -- Name: api_task_id_seq; Type: SEQUENCE; Schema: public; Owner: user
 --
 
@@ -291,8 +307,8 @@ CREATE SEQUENCE public.api_task_id_seq
 ALTER TABLE public.api_task_id_seq OWNER TO "user";
 
 --
--- TOC entry 3215 (class 0 OID 0)
--- Dependencies: 232
+-- TOC entry 3241 (class 0 OID 0)
+-- Dependencies: 215
 -- Name: api_task_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
 --
 
@@ -300,7 +316,45 @@ ALTER SEQUENCE public.api_task_id_seq OWNED BY public.api_task.id;
 
 
 --
--- TOC entry 213 (class 1259 OID 16460)
+-- TOC entry 237 (class 1259 OID 16684)
+-- Name: api_taskdependency; Type: TABLE; Schema: public; Owner: user
+--
+
+CREATE TABLE public.api_taskdependency (
+    id bigint NOT NULL,
+    after_id bigint NOT NULL,
+    before_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.api_taskdependency OWNER TO "user";
+
+--
+-- TOC entry 236 (class 1259 OID 16682)
+-- Name: api_taskdependency_id_seq; Type: SEQUENCE; Schema: public; Owner: user
+--
+
+CREATE SEQUENCE public.api_taskdependency_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.api_taskdependency_id_seq OWNER TO "user";
+
+--
+-- TOC entry 3242 (class 0 OID 0)
+-- Dependencies: 236
+-- Name: api_taskdependency_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
+--
+
+ALTER SEQUENCE public.api_taskdependency_id_seq OWNED BY public.api_taskdependency.id;
+
+
+--
+-- TOC entry 216 (class 1259 OID 16426)
 -- Name: api_user; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -325,7 +379,7 @@ CREATE TABLE public.api_user (
 ALTER TABLE public.api_user OWNER TO "user";
 
 --
--- TOC entry 215 (class 1259 OID 16473)
+-- TOC entry 217 (class 1259 OID 16432)
 -- Name: api_user_groups; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -339,7 +393,7 @@ CREATE TABLE public.api_user_groups (
 ALTER TABLE public.api_user_groups OWNER TO "user";
 
 --
--- TOC entry 214 (class 1259 OID 16471)
+-- TOC entry 218 (class 1259 OID 16435)
 -- Name: api_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: user
 --
 
@@ -354,8 +408,8 @@ CREATE SEQUENCE public.api_user_groups_id_seq
 ALTER TABLE public.api_user_groups_id_seq OWNER TO "user";
 
 --
--- TOC entry 3216 (class 0 OID 0)
--- Dependencies: 214
+-- TOC entry 3243 (class 0 OID 0)
+-- Dependencies: 218
 -- Name: api_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
 --
 
@@ -363,7 +417,7 @@ ALTER SEQUENCE public.api_user_groups_id_seq OWNED BY public.api_user_groups.id;
 
 
 --
--- TOC entry 212 (class 1259 OID 16458)
+-- TOC entry 219 (class 1259 OID 16437)
 -- Name: api_user_id_seq; Type: SEQUENCE; Schema: public; Owner: user
 --
 
@@ -378,8 +432,8 @@ CREATE SEQUENCE public.api_user_id_seq
 ALTER TABLE public.api_user_id_seq OWNER TO "user";
 
 --
--- TOC entry 3217 (class 0 OID 0)
--- Dependencies: 212
+-- TOC entry 3244 (class 0 OID 0)
+-- Dependencies: 219
 -- Name: api_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
 --
 
@@ -387,7 +441,7 @@ ALTER SEQUENCE public.api_user_id_seq OWNED BY public.api_user.id;
 
 
 --
--- TOC entry 217 (class 1259 OID 16481)
+-- TOC entry 220 (class 1259 OID 16439)
 -- Name: api_user_user_permissions; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -401,7 +455,7 @@ CREATE TABLE public.api_user_user_permissions (
 ALTER TABLE public.api_user_user_permissions OWNER TO "user";
 
 --
--- TOC entry 216 (class 1259 OID 16479)
+-- TOC entry 221 (class 1259 OID 16442)
 -- Name: api_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: user
 --
 
@@ -416,8 +470,8 @@ CREATE SEQUENCE public.api_user_user_permissions_id_seq
 ALTER TABLE public.api_user_user_permissions_id_seq OWNER TO "user";
 
 --
--- TOC entry 3218 (class 0 OID 0)
--- Dependencies: 216
+-- TOC entry 3245 (class 0 OID 0)
+-- Dependencies: 221
 -- Name: api_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
 --
 
@@ -425,7 +479,7 @@ ALTER SEQUENCE public.api_user_user_permissions_id_seq OWNED BY public.api_user_
 
 
 --
--- TOC entry 209 (class 1259 OID 16416)
+-- TOC entry 222 (class 1259 OID 16444)
 -- Name: auth_group; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -438,7 +492,7 @@ CREATE TABLE public.auth_group (
 ALTER TABLE public.auth_group OWNER TO "user";
 
 --
--- TOC entry 208 (class 1259 OID 16414)
+-- TOC entry 223 (class 1259 OID 16447)
 -- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: user
 --
 
@@ -454,8 +508,8 @@ CREATE SEQUENCE public.auth_group_id_seq
 ALTER TABLE public.auth_group_id_seq OWNER TO "user";
 
 --
--- TOC entry 3219 (class 0 OID 0)
--- Dependencies: 208
+-- TOC entry 3246 (class 0 OID 0)
+-- Dependencies: 223
 -- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
 --
 
@@ -463,7 +517,7 @@ ALTER SEQUENCE public.auth_group_id_seq OWNED BY public.auth_group.id;
 
 
 --
--- TOC entry 211 (class 1259 OID 16426)
+-- TOC entry 224 (class 1259 OID 16449)
 -- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -477,7 +531,7 @@ CREATE TABLE public.auth_group_permissions (
 ALTER TABLE public.auth_group_permissions OWNER TO "user";
 
 --
--- TOC entry 210 (class 1259 OID 16424)
+-- TOC entry 225 (class 1259 OID 16452)
 -- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: user
 --
 
@@ -492,8 +546,8 @@ CREATE SEQUENCE public.auth_group_permissions_id_seq
 ALTER TABLE public.auth_group_permissions_id_seq OWNER TO "user";
 
 --
--- TOC entry 3220 (class 0 OID 0)
--- Dependencies: 210
+-- TOC entry 3247 (class 0 OID 0)
+-- Dependencies: 225
 -- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
 --
 
@@ -501,7 +555,7 @@ ALTER SEQUENCE public.auth_group_permissions_id_seq OWNED BY public.auth_group_p
 
 
 --
--- TOC entry 207 (class 1259 OID 16408)
+-- TOC entry 226 (class 1259 OID 16454)
 -- Name: auth_permission; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -516,7 +570,7 @@ CREATE TABLE public.auth_permission (
 ALTER TABLE public.auth_permission OWNER TO "user";
 
 --
--- TOC entry 206 (class 1259 OID 16406)
+-- TOC entry 227 (class 1259 OID 16457)
 -- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: user
 --
 
@@ -532,8 +586,8 @@ CREATE SEQUENCE public.auth_permission_id_seq
 ALTER TABLE public.auth_permission_id_seq OWNER TO "user";
 
 --
--- TOC entry 3221 (class 0 OID 0)
--- Dependencies: 206
+-- TOC entry 3248 (class 0 OID 0)
+-- Dependencies: 227
 -- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
 --
 
@@ -541,7 +595,7 @@ ALTER SEQUENCE public.auth_permission_id_seq OWNED BY public.auth_permission.id;
 
 
 --
--- TOC entry 231 (class 1259 OID 16630)
+-- TOC entry 228 (class 1259 OID 16459)
 -- Name: authtoken_token; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -555,7 +609,7 @@ CREATE TABLE public.authtoken_token (
 ALTER TABLE public.authtoken_token OWNER TO "user";
 
 --
--- TOC entry 229 (class 1259 OID 16597)
+-- TOC entry 229 (class 1259 OID 16462)
 -- Name: django_admin_log; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -575,7 +629,7 @@ CREATE TABLE public.django_admin_log (
 ALTER TABLE public.django_admin_log OWNER TO "user";
 
 --
--- TOC entry 228 (class 1259 OID 16595)
+-- TOC entry 230 (class 1259 OID 16469)
 -- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: user
 --
 
@@ -591,8 +645,8 @@ CREATE SEQUENCE public.django_admin_log_id_seq
 ALTER TABLE public.django_admin_log_id_seq OWNER TO "user";
 
 --
--- TOC entry 3222 (class 0 OID 0)
--- Dependencies: 228
+-- TOC entry 3249 (class 0 OID 0)
+-- Dependencies: 230
 -- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
 --
 
@@ -600,7 +654,7 @@ ALTER SEQUENCE public.django_admin_log_id_seq OWNED BY public.django_admin_log.i
 
 
 --
--- TOC entry 205 (class 1259 OID 16398)
+-- TOC entry 231 (class 1259 OID 16471)
 -- Name: django_content_type; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -614,7 +668,7 @@ CREATE TABLE public.django_content_type (
 ALTER TABLE public.django_content_type OWNER TO "user";
 
 --
--- TOC entry 204 (class 1259 OID 16396)
+-- TOC entry 232 (class 1259 OID 16474)
 -- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: user
 --
 
@@ -630,8 +684,8 @@ CREATE SEQUENCE public.django_content_type_id_seq
 ALTER TABLE public.django_content_type_id_seq OWNER TO "user";
 
 --
--- TOC entry 3223 (class 0 OID 0)
--- Dependencies: 204
+-- TOC entry 3250 (class 0 OID 0)
+-- Dependencies: 232
 -- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
 --
 
@@ -639,7 +693,7 @@ ALTER SEQUENCE public.django_content_type_id_seq OWNED BY public.django_content_
 
 
 --
--- TOC entry 203 (class 1259 OID 16387)
+-- TOC entry 233 (class 1259 OID 16476)
 -- Name: django_migrations; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -654,7 +708,7 @@ CREATE TABLE public.django_migrations (
 ALTER TABLE public.django_migrations OWNER TO "user";
 
 --
--- TOC entry 202 (class 1259 OID 16385)
+-- TOC entry 234 (class 1259 OID 16482)
 -- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: user
 --
 
@@ -669,8 +723,8 @@ CREATE SEQUENCE public.django_migrations_id_seq
 ALTER TABLE public.django_migrations_id_seq OWNER TO "user";
 
 --
--- TOC entry 3224 (class 0 OID 0)
--- Dependencies: 202
+-- TOC entry 3251 (class 0 OID 0)
+-- Dependencies: 234
 -- Name: django_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
 --
 
@@ -678,7 +732,7 @@ ALTER SEQUENCE public.django_migrations_id_seq OWNED BY public.django_migrations
 
 
 --
--- TOC entry 230 (class 1259 OID 16619)
+-- TOC entry 235 (class 1259 OID 16484)
 -- Name: django_session; Type: TABLE; Schema: public; Owner: user
 --
 
@@ -692,7 +746,7 @@ CREATE TABLE public.django_session (
 ALTER TABLE public.django_session OWNER TO "user";
 
 --
--- TOC entry 2936 (class 2604 OID 16492)
+-- TOC entry 2939 (class 2604 OID 16490)
 -- Name: api_paper id; Type: DEFAULT; Schema: public; Owner: user
 --
 
@@ -700,7 +754,7 @@ ALTER TABLE ONLY public.api_paper ALTER COLUMN id SET DEFAULT nextval('public.ap
 
 
 --
--- TOC entry 2937 (class 2604 OID 16505)
+-- TOC entry 2940 (class 2604 OID 16491)
 -- Name: api_project id; Type: DEFAULT; Schema: public; Owner: user
 --
 
@@ -708,7 +762,7 @@ ALTER TABLE ONLY public.api_project ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 2940 (class 2604 OID 16532)
+-- TOC entry 2941 (class 2604 OID 16492)
 -- Name: api_projectcollaborator id; Type: DEFAULT; Schema: public; Owner: user
 --
 
@@ -716,7 +770,7 @@ ALTER TABLE ONLY public.api_projectcollaborator ALTER COLUMN id SET DEFAULT next
 
 
 --
--- TOC entry 2938 (class 2604 OID 16516)
+-- TOC entry 2942 (class 2604 OID 16493)
 -- Name: api_projectlist id; Type: DEFAULT; Schema: public; Owner: user
 --
 
@@ -724,7 +778,7 @@ ALTER TABLE ONLY public.api_projectlist ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 2939 (class 2604 OID 16524)
+-- TOC entry 2943 (class 2604 OID 16494)
 -- Name: api_projectpaper id; Type: DEFAULT; Schema: public; Owner: user
 --
 
@@ -732,7 +786,7 @@ ALTER TABLE ONLY public.api_projectpaper ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
--- TOC entry 2943 (class 2604 OID 16648)
+-- TOC entry 2944 (class 2604 OID 16495)
 -- Name: api_task id; Type: DEFAULT; Schema: public; Owner: user
 --
 
@@ -740,7 +794,7 @@ ALTER TABLE ONLY public.api_task ALTER COLUMN id SET DEFAULT nextval('public.api
 
 
 --
--- TOC entry 2944 (class 2604 OID 16656)
+-- TOC entry 2945 (class 2604 OID 16496)
 -- Name: api_task_assignees id; Type: DEFAULT; Schema: public; Owner: user
 --
 
@@ -748,7 +802,15 @@ ALTER TABLE ONLY public.api_task_assignees ALTER COLUMN id SET DEFAULT nextval('
 
 
 --
--- TOC entry 2933 (class 2604 OID 16463)
+-- TOC entry 2956 (class 2604 OID 16687)
+-- Name: api_taskdependency id; Type: DEFAULT; Schema: public; Owner: user
+--
+
+ALTER TABLE ONLY public.api_taskdependency ALTER COLUMN id SET DEFAULT nextval('public.api_taskdependency_id_seq'::regclass);
+
+
+--
+-- TOC entry 2946 (class 2604 OID 16497)
 -- Name: api_user id; Type: DEFAULT; Schema: public; Owner: user
 --
 
@@ -756,7 +818,7 @@ ALTER TABLE ONLY public.api_user ALTER COLUMN id SET DEFAULT nextval('public.api
 
 
 --
--- TOC entry 2934 (class 2604 OID 16476)
+-- TOC entry 2947 (class 2604 OID 16498)
 -- Name: api_user_groups id; Type: DEFAULT; Schema: public; Owner: user
 --
 
@@ -764,7 +826,7 @@ ALTER TABLE ONLY public.api_user_groups ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 2935 (class 2604 OID 16484)
+-- TOC entry 2948 (class 2604 OID 16499)
 -- Name: api_user_user_permissions id; Type: DEFAULT; Schema: public; Owner: user
 --
 
@@ -772,7 +834,7 @@ ALTER TABLE ONLY public.api_user_user_permissions ALTER COLUMN id SET DEFAULT ne
 
 
 --
--- TOC entry 2931 (class 2604 OID 16419)
+-- TOC entry 2949 (class 2604 OID 16500)
 -- Name: auth_group id; Type: DEFAULT; Schema: public; Owner: user
 --
 
@@ -780,7 +842,7 @@ ALTER TABLE ONLY public.auth_group ALTER COLUMN id SET DEFAULT nextval('public.a
 
 
 --
--- TOC entry 2932 (class 2604 OID 16429)
+-- TOC entry 2950 (class 2604 OID 16501)
 -- Name: auth_group_permissions id; Type: DEFAULT; Schema: public; Owner: user
 --
 
@@ -788,7 +850,7 @@ ALTER TABLE ONLY public.auth_group_permissions ALTER COLUMN id SET DEFAULT nextv
 
 
 --
--- TOC entry 2930 (class 2604 OID 16411)
+-- TOC entry 2951 (class 2604 OID 16502)
 -- Name: auth_permission id; Type: DEFAULT; Schema: public; Owner: user
 --
 
@@ -796,7 +858,7 @@ ALTER TABLE ONLY public.auth_permission ALTER COLUMN id SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 2941 (class 2604 OID 16600)
+-- TOC entry 2952 (class 2604 OID 16503)
 -- Name: django_admin_log id; Type: DEFAULT; Schema: public; Owner: user
 --
 
@@ -804,7 +866,7 @@ ALTER TABLE ONLY public.django_admin_log ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
--- TOC entry 2929 (class 2604 OID 16401)
+-- TOC entry 2954 (class 2604 OID 16504)
 -- Name: django_content_type id; Type: DEFAULT; Schema: public; Owner: user
 --
 
@@ -812,7 +874,7 @@ ALTER TABLE ONLY public.django_content_type ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
--- TOC entry 2928 (class 2604 OID 16390)
+-- TOC entry 2955 (class 2604 OID 16505)
 -- Name: django_migrations id; Type: DEFAULT; Schema: public; Owner: user
 --
 
@@ -820,8 +882,18 @@ ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
--- TOC entry 3187 (class 0 OID 16489)
--- Dependencies: 219
+-- TOC entry 3229 (class 0 OID 16718)
+-- Dependencies: 238
+-- Data for Name: api_note; Type: TABLE DATA; Schema: public; Owner: user
+--
+
+INSERT INTO public.api_note VALUES ('Nice', 'Private', '2022-08-12 12:21:07.056822+06', NULL, 12);
+INSERT INTO public.api_note VALUES ('', 'Public', '2022-08-12 12:21:12.149364+06', NULL, 11);
+
+
+--
+-- TOC entry 3193 (class 0 OID 16385)
+-- Dependencies: 202
 -- Data for Name: api_paper; Type: TABLE DATA; Schema: public; Owner: user
 --
 
@@ -833,11 +905,12 @@ INSERT INTO public.api_paper VALUES (3, 'Sledge: a Serverless-first, Light-weigh
 
 In this paper, we present the design and implementation of Sledge -- a novel and efficient WebAssembly-based serverless framework for the Edge. Sledge is optimized for supporting unique properties of serverless workloads: the need for high density multi-tenancy, low startup time, bursty client request rates, and short-lived computations. Sledge is designed for these constraints by offering (i) optimized scheduling policies and efficient work-distribution for short-lived computations, and (ii) a light-weight function isolation model implemented using our own WebAssembly-based software fault isolation infrastructure. These lightweight sandboxes are designed to support high-density computation: with fast startup and teardown times to handle high client request rates. An extensive evaluation of Sledge with varying workloads and real-world serverless applications demonstrates the effectiveness of the designed serverless-first runtime for the Edge. Sledge supports up to 4 times higher throughput and 4 times lower latencies compared to Nuclio, one of the fastest open-source serverless frameworks.', 'Phani Kishore Gadepalli,  Sean McBride,  Gregor Peach,  Ludmila Cherkasova,  Gabriel Parmer');
 INSERT INTO public.api_paper VALUES (4, 'Gillis: Serving Large Neural Networks in Serverless Functions with Automatic Model Partitioning', '10.1109/ICDCS51616.2021.00022', 'The increased use of deep neural networks has stimulated the growing demand for cloud-based model serving platforms. Serverless computing offers a simplified solution: users deploy models as serverless functions and let the platform handle provisioning and scaling. However, serverless functions have constrained resources in CPU and memory, making them inefficient or infeasible to serve large neural networks-which have become increasingly popular. In this paper, we present Gillis, a serverless-based model serving system that automatically partitions a large model across multiple serverless functions for faster inference and reduced memory footprint per function. Gillis employs two novel model partitioning algorithms that respectively achieve latency-optimal serving and cost-optimal serving with SLO compliance. We have implemented Gillis on three serverless platforms-AWS Lambda, Google Cloud Functions, and KNIX-with MXNet as the serving backend. Experimental evaluations against popular models show that Gillis supports serving very large neural networks, reduces the inference latency substantially, and meets various SLOs with a low serving cost.', 'Minchen Yu; Zhifeng Jiang; Hok Chun Ng; Wei Wang; Ruichuan Chen; Bo Li');
+INSERT INTO public.api_paper VALUES (9, 'Distributed Double Machine Learning with a Serverless Architecture', '10.1145/3447545.3451181', 'This paper explores serverless cloud computing for double machine learning. Being based on repeated cross-fitting, double machine learning is particularly well suited to exploit the high level of parallelism achievable with serverless computing. It allows to get fast on-demand estimations without additional cloud maintenance effort. We provide a prototype Python implementation DoubleML-Serverless for the estimation of double machine learning models with the serverless computing platform AWS Lambda and demonstrate its utility with a case study analyzing estimation times and costs.', '[''Malte S. Kurz'']');
 
 
 --
--- TOC entry 3189 (class 0 OID 16502)
--- Dependencies: 221
+-- TOC entry 3195 (class 0 OID 16393)
+-- Dependencies: 204
 -- Data for Name: api_project; Type: TABLE DATA; Schema: public; Owner: user
 --
 
@@ -848,8 +921,8 @@ INSERT INTO public.api_project VALUES (4, 'Reinforcement Learning', NULL, '', fa
 
 
 --
--- TOC entry 3195 (class 0 OID 16529)
--- Dependencies: 227
+-- TOC entry 3197 (class 0 OID 16401)
+-- Dependencies: 206
 -- Data for Name: api_projectcollaborator; Type: TABLE DATA; Schema: public; Owner: user
 --
 
@@ -858,8 +931,8 @@ INSERT INTO public.api_projectcollaborator VALUES (3, 'Supervisor', 1, 1);
 
 
 --
--- TOC entry 3191 (class 0 OID 16513)
--- Dependencies: 223
+-- TOC entry 3199 (class 0 OID 16406)
+-- Dependencies: 208
 -- Data for Name: api_projectlist; Type: TABLE DATA; Schema: public; Owner: user
 --
 
@@ -871,83 +944,101 @@ INSERT INTO public.api_projectlist VALUES (5, 'Default', false, 2);
 
 
 --
--- TOC entry 3193 (class 0 OID 16521)
--- Dependencies: 225
+-- TOC entry 3201 (class 0 OID 16411)
+-- Dependencies: 210
 -- Data for Name: api_projectpaper; Type: TABLE DATA; Schema: public; Owner: user
 --
 
 INSERT INTO public.api_projectpaper VALUES (1, '2022-07-10 13:46:45.088714+06', 3, 1);
 INSERT INTO public.api_projectpaper VALUES (3, '2022-07-15 09:20:40.879753+06', 5, 4);
+INSERT INTO public.api_projectpaper VALUES (11, '2022-08-12 11:52:53.76108+06', 4, 9);
+INSERT INTO public.api_projectpaper VALUES (12, '2022-08-12 11:53:08.23548+06', 3, 9);
 
 
 --
--- TOC entry 3201 (class 0 OID 16645)
--- Dependencies: 233
+-- TOC entry 3203 (class 0 OID 16416)
+-- Dependencies: 212
 -- Data for Name: api_task; Type: TABLE DATA; Schema: public; Owner: user
 --
 
-INSERT INTO public.api_task VALUES (1, 'Read later', NULL, NULL, 'Later', 1, NULL);
-INSERT INTO public.api_task VALUES (2, 'Read paper', NULL, NULL, 'Next', 2, 3);
-INSERT INTO public.api_task VALUES (3, 'Read paper', NULL, NULL, 'Next', 2, 3);
+INSERT INTO public.api_task VALUES (1, 'Literature Review', NULL, NULL, 'Next', 2, NULL);
+INSERT INTO public.api_task VALUES (6, 'Run Code', '2022-07-18 00:00:00+06', '2022-07-08 00:00:00+06', 'Later', 2, NULL);
+INSERT INTO public.api_task VALUES (3, 'Read Firecracker paper', '2022-08-03 00:00:00+06', NULL, 'Progress', 2, 1);
+INSERT INTO public.api_task VALUES (2, 'Read Gillis pap', NULL, NULL, 'Done', 2, 3);
+INSERT INTO public.api_task VALUES (13, 'New task 2', '2022-07-18 00:00:00+06', '2022-07-08 00:00:00+06', 'Later', 2, 3);
 
 
 --
--- TOC entry 3203 (class 0 OID 16653)
--- Dependencies: 235
+-- TOC entry 3204 (class 0 OID 16419)
+-- Dependencies: 213
 -- Data for Name: api_task_assignees; Type: TABLE DATA; Schema: public; Owner: user
 --
 
 INSERT INTO public.api_task_assignees VALUES (1, 1, 3);
 INSERT INTO public.api_task_assignees VALUES (2, 2, 1);
 INSERT INTO public.api_task_assignees VALUES (3, 3, 1);
+INSERT INTO public.api_task_assignees VALUES (5, 6, 1);
 
 
 --
--- TOC entry 3181 (class 0 OID 16460)
--- Dependencies: 213
+-- TOC entry 3228 (class 0 OID 16684)
+-- Dependencies: 237
+-- Data for Name: api_taskdependency; Type: TABLE DATA; Schema: public; Owner: user
+--
+
+INSERT INTO public.api_taskdependency VALUES (1, 2, 3);
+INSERT INTO public.api_taskdependency VALUES (4, 6, 2);
+INSERT INTO public.api_taskdependency VALUES (5, 1, 1);
+INSERT INTO public.api_taskdependency VALUES (6, 1, 6);
+INSERT INTO public.api_taskdependency VALUES (7, 3, 6);
+
+
+--
+-- TOC entry 3207 (class 0 OID 16426)
+-- Dependencies: 216
 -- Data for Name: api_user; Type: TABLE DATA; Schema: public; Owner: user
 --
 
-INSERT INTO public.api_user VALUES (1, 'pbkdf2_sha256$320000$oSzNBKuqmcoQc29WO802LH$fa/450s706xCoT5KJewjXWNnQuxc+OvDMTHJ8d1GRVU=', '2022-07-16 10:22:19.008557+06', true, 'tahmeed', '', '', 't@g.com', true, true, '2022-07-09 18:52:25.634703+06', NULL, NULL, NULL);
 INSERT INTO public.api_user VALUES (2, 'pbkdf2_sha256$320000$cgUGPBFbiv4gduDYAtJuQp$JrqOqdLaq1G5JF0smh7ZAiPZrWvBDP2sgKFbs3c738w=', NULL, true, 'sadia', '', '', 'sadia@gmail.com', true, true, '2022-07-16 11:02:20.682435+06', NULL, NULL, NULL);
 INSERT INTO public.api_user VALUES (3, 'pbkdf2_sha256$320000$74knswBHXKPD9WcyFVdaIo$FIoUJyBde9T1+bZSePEY+Gd83ylBOXrptg544mo6aL0=', NULL, true, 'najib', '', '', 'najib@gmail.com', true, true, '2022-07-16 11:02:42.395261+06', NULL, NULL, NULL);
+INSERT INTO public.api_user VALUES (1, 'pbkdf2_sha256$320000$oSzNBKuqmcoQc29WO802LH$fa/450s706xCoT5KJewjXWNnQuxc+OvDMTHJ8d1GRVU=', '2022-07-31 07:01:13.271138+06', true, 'tahmeed', '', '', 't@g.com', true, true, '2022-07-09 18:52:25.634703+06', NULL, NULL, NULL);
 
 
 --
--- TOC entry 3183 (class 0 OID 16473)
--- Dependencies: 215
+-- TOC entry 3208 (class 0 OID 16432)
+-- Dependencies: 217
 -- Data for Name: api_user_groups; Type: TABLE DATA; Schema: public; Owner: user
 --
 
 
 
 --
--- TOC entry 3185 (class 0 OID 16481)
--- Dependencies: 217
+-- TOC entry 3211 (class 0 OID 16439)
+-- Dependencies: 220
 -- Data for Name: api_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: user
 --
 
 
 
 --
--- TOC entry 3177 (class 0 OID 16416)
--- Dependencies: 209
+-- TOC entry 3213 (class 0 OID 16444)
+-- Dependencies: 222
 -- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: user
 --
 
 
 
 --
--- TOC entry 3179 (class 0 OID 16426)
--- Dependencies: 211
+-- TOC entry 3215 (class 0 OID 16449)
+-- Dependencies: 224
 -- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: user
 --
 
 
 
 --
--- TOC entry 3175 (class 0 OID 16408)
--- Dependencies: 207
+-- TOC entry 3217 (class 0 OID 16454)
+-- Dependencies: 226
 -- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: user
 --
 
@@ -1007,11 +1098,19 @@ INSERT INTO public.auth_permission VALUES (53, 'Can add task', 14, 'add_task');
 INSERT INTO public.auth_permission VALUES (54, 'Can change task', 14, 'change_task');
 INSERT INTO public.auth_permission VALUES (55, 'Can delete task', 14, 'delete_task');
 INSERT INTO public.auth_permission VALUES (56, 'Can view task', 14, 'view_task');
+INSERT INTO public.auth_permission VALUES (57, 'Can add task dependency', 15, 'add_taskdependency');
+INSERT INTO public.auth_permission VALUES (58, 'Can change task dependency', 15, 'change_taskdependency');
+INSERT INTO public.auth_permission VALUES (59, 'Can delete task dependency', 15, 'delete_taskdependency');
+INSERT INTO public.auth_permission VALUES (60, 'Can view task dependency', 15, 'view_taskdependency');
+INSERT INTO public.auth_permission VALUES (61, 'Can add note', 16, 'add_note');
+INSERT INTO public.auth_permission VALUES (62, 'Can change note', 16, 'change_note');
+INSERT INTO public.auth_permission VALUES (63, 'Can delete note', 16, 'delete_note');
+INSERT INTO public.auth_permission VALUES (64, 'Can view note', 16, 'view_note');
 
 
 --
--- TOC entry 3199 (class 0 OID 16630)
--- Dependencies: 231
+-- TOC entry 3219 (class 0 OID 16459)
+-- Dependencies: 228
 -- Data for Name: authtoken_token; Type: TABLE DATA; Schema: public; Owner: user
 --
 
@@ -1021,7 +1120,7 @@ INSERT INTO public.authtoken_token VALUES ('8e51af3341b226c342d27167c44948af239f
 
 
 --
--- TOC entry 3197 (class 0 OID 16597)
+-- TOC entry 3220 (class 0 OID 16462)
 -- Dependencies: 229
 -- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: user
 --
@@ -1049,11 +1148,35 @@ INSERT INTO public.django_admin_log VALUES (20, '2022-07-15 09:20:31.646667+06',
 INSERT INTO public.django_admin_log VALUES (21, '2022-07-15 09:55:54.341596+06', '3', 'ProjectPaper object (3)', 2, '[{"changed": {"fields": ["List"]}}]', 10, 1);
 INSERT INTO public.django_admin_log VALUES (22, '2022-07-15 09:56:36.716343+06', '2', 'ProjectCollaborator object (2)', 3, '', 11, 1);
 INSERT INTO public.django_admin_log VALUES (23, '2022-07-16 10:28:49.851861+06', '1', 'Task object (1)', 1, '[{"added": {}}]', 14, 1);
+INSERT INTO public.django_admin_log VALUES (24, '2022-07-28 08:33:01.316974+06', '3', 'Task object (3)', 2, '[{"changed": {"fields": ["Project paper"]}}]', 14, 1);
+INSERT INTO public.django_admin_log VALUES (25, '2022-07-31 14:23:33.530607+06', '4', '4-Distributed Double M...-Done', 3, '', 10, 1);
+INSERT INTO public.django_admin_log VALUES (26, '2022-07-31 14:23:44.573191+06', '8', '8-Distributed Double M...', 3, '', 7, 1);
+INSERT INTO public.django_admin_log VALUES (27, '2022-07-31 14:31:14.1242+06', '5', '5-Distributed Double M...-Default', 3, '', 10, 1);
+INSERT INTO public.django_admin_log VALUES (28, '2022-07-31 15:11:59.436236+06', '1', 'TaskDependency object (1)', 1, '[{"added": {}}]', 15, 1);
+INSERT INTO public.django_admin_log VALUES (29, '2022-07-31 15:11:59.550283+06', '2', 'TaskDependency object (2)', 1, '[{"added": {}}]', 15, 1);
+INSERT INTO public.django_admin_log VALUES (30, '2022-07-31 15:12:13.158998+06', '3', 'TaskDependency object (3)', 1, '[{"added": {}}]', 15, 1);
+INSERT INTO public.django_admin_log VALUES (31, '2022-07-31 15:12:17.931844+06', '2', 'TaskDependency object (2)', 3, '', 15, 1);
+INSERT INTO public.django_admin_log VALUES (32, '2022-07-31 15:16:09.766898+06', '4', 'TaskDependency object (4)', 1, '[{"added": {}}]', 15, 1);
+INSERT INTO public.django_admin_log VALUES (33, '2022-07-31 16:02:04.846943+06', '1', 'Task object (1)', 2, '[{"changed": {"fields": ["Project"]}}]', 14, 1);
+INSERT INTO public.django_admin_log VALUES (34, '2022-07-31 16:02:46.891339+06', '6', 'Task object (6)', 2, '[{"changed": {"fields": ["Assignees"]}}]', 14, 1);
+INSERT INTO public.django_admin_log VALUES (35, '2022-08-12 09:45:04.304576+06', '8', '8-New task 1-Later', 3, '', 14, 1);
+INSERT INTO public.django_admin_log VALUES (36, '2022-08-12 09:45:09.358589+06', '9', '9-New task 1-Later', 3, '', 14, 1);
+INSERT INTO public.django_admin_log VALUES (37, '2022-08-12 11:20:58.978837+06', '7', '7-Distributed Double M...-Default', 3, '', 10, 1);
+INSERT INTO public.django_admin_log VALUES (38, '2022-08-12 11:21:12.100645+06', '10', '10-Distributed Double M...-Default', 1, '[{"added": {}}]', 10, 1);
+INSERT INTO public.django_admin_log VALUES (39, '2022-08-12 11:52:33.30207+06', '10', '10-Distributed Double M...-Default', 3, '', 10, 1);
+INSERT INTO public.django_admin_log VALUES (40, '2022-08-12 11:52:36.464947+06', '9', '9-Distributed Double M...-Default', 3, '', 10, 1);
+INSERT INTO public.django_admin_log VALUES (41, '2022-08-12 11:52:40.753032+06', '8', '8-Distributed Double M...-Default', 3, '', 10, 1);
+INSERT INTO public.django_admin_log VALUES (42, '2022-08-12 11:52:44.289285+06', '6', '6-Distributed Double M...-Default', 3, '', 10, 1);
+INSERT INTO public.django_admin_log VALUES (43, '2022-08-12 11:52:53.763439+06', '11', '11-Distributed Double M...-Done', 1, '[{"added": {}}]', 10, 1);
+INSERT INTO public.django_admin_log VALUES (44, '2022-08-12 11:53:08.237599+06', '12', '12-Distributed Double M...-Next', 1, '[{"added": {}}]', 10, 1);
+INSERT INTO public.django_admin_log VALUES (45, '2022-08-12 12:20:50.9749+06', '12', '12-Distributed Double M...-Next-Public', 2, '[{"changed": {"fields": ["Visibility"]}}]', 16, 1);
+INSERT INTO public.django_admin_log VALUES (46, '2022-08-12 12:21:07.064887+06', '12', '12-Distributed Double M...-Next-Private', 2, '[{"changed": {"fields": ["Visibility"]}}]', 16, 1);
+INSERT INTO public.django_admin_log VALUES (47, '2022-08-12 12:21:12.156398+06', '11', '11-Distributed Double M...-Done-Public', 2, '[{"changed": {"fields": ["Visibility"]}}]', 16, 1);
 
 
 --
--- TOC entry 3173 (class 0 OID 16398)
--- Dependencies: 205
+-- TOC entry 3222 (class 0 OID 16471)
+-- Dependencies: 231
 -- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: user
 --
 
@@ -1071,11 +1194,13 @@ INSERT INTO public.django_content_type VALUES (11, 'api', 'projectcollaborator')
 INSERT INTO public.django_content_type VALUES (12, 'authtoken', 'token');
 INSERT INTO public.django_content_type VALUES (13, 'authtoken', 'tokenproxy');
 INSERT INTO public.django_content_type VALUES (14, 'api', 'task');
+INSERT INTO public.django_content_type VALUES (15, 'api', 'taskdependency');
+INSERT INTO public.django_content_type VALUES (16, 'api', 'note');
 
 
 --
--- TOC entry 3171 (class 0 OID 16387)
--- Dependencies: 203
+-- TOC entry 3224 (class 0 OID 16476)
+-- Dependencies: 233
 -- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: user
 --
 
@@ -1103,30 +1228,34 @@ INSERT INTO public.django_migrations VALUES (21, 'authtoken', '0002_auto_2016022
 INSERT INTO public.django_migrations VALUES (22, 'authtoken', '0003_tokenproxy', '2022-07-10 21:08:58.760859+06');
 INSERT INTO public.django_migrations VALUES (23, 'api', '0002_task', '2022-07-16 09:50:24.071885+06');
 INSERT INTO public.django_migrations VALUES (24, 'api', '0003_alter_task_project_alter_task_project_paper', '2022-07-16 10:26:19.493513+06');
+INSERT INTO public.django_migrations VALUES (25, 'api', '0004_taskdependency', '2022-07-31 15:08:07.563754+06');
+INSERT INTO public.django_migrations VALUES (27, 'api', '0005_note', '2022-08-12 10:57:26.008773+06');
+INSERT INTO public.django_migrations VALUES (29, 'api', '0006_rename_creator_id_note_creator_and_more', '2022-08-12 11:49:11.639296+06');
 
 
 --
--- TOC entry 3198 (class 0 OID 16619)
--- Dependencies: 230
+-- TOC entry 3226 (class 0 OID 16484)
+-- Dependencies: 235
 -- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: user
 --
 
 INSERT INTO public.django_session VALUES ('h2kcgfjqy1cg3pjrgkulicwsjrwe10s5', '.eJxVjEEOwiAQRe_C2pDSGR1w6b5nIAMDUjU0Ke3KeHfbpAvdvvf-fyvP61L82tLsR1FXZdTplwWOz1R3IQ-u90nHqS7zGPSe6MM2PUySXrej_Tso3Mq2tmhN3xEmCh1bIiYLgEKmd7AhiJyTXHIGB8gRwLCTmM9okiMHgurzBb2rN1E:1oA9wp:HFkgxAjr2RptxgTwcnCdwMK-OaDn35WgP5Vj8JlVmvI', '2022-07-23 18:52:35.733767+06');
 INSERT INTO public.django_session VALUES ('d5j9lax6erkmrpl621lk705lwjlicyw6', '.eJxVjEEOwiAQRe_C2pDSGR1w6b5nIAMDUjU0Ke3KeHfbpAvdvvf-fyvP61L82tLsR1FXZdTplwWOz1R3IQ-u90nHqS7zGPSe6MM2PUySXrej_Tso3Mq2tmhN3xEmCh1bIiYLgEKmd7AhiJyTXHIGB8gRwLCTmM9okiMHgurzBb2rN1E:1oCZJr:GsYugvkRgOGZwTv-NEBUodBhPEOvL1Y-auoN55d_0ms', '2022-07-30 10:22:19.016834+06');
+INSERT INTO public.django_session VALUES ('p0280unxtdtlamifarfclc7izgzzopj3', '.eJxVjEEOwiAQRe_C2pDSGR1w6b5nIAMDUjU0Ke3KeHfbpAvdvvf-fyvP61L82tLsR1FXZdTplwWOz1R3IQ-u90nHqS7zGPSe6MM2PUySXrej_Tso3Mq2tmhN3xEmCh1bIiYLgEKmd7AhiJyTXHIGB8gRwLCTmM9okiMHgurzBb2rN1E:1oHxKT:324PHZlDrAiCQ_z_BODesm7BrPxyK0cGZoJrvdgRPPk', '2022-08-14 07:01:13.276673+06');
 
 
 --
--- TOC entry 3225 (class 0 OID 0)
--- Dependencies: 218
+-- TOC entry 3252 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: api_paper_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.api_paper_id_seq', 7, true);
+SELECT pg_catalog.setval('public.api_paper_id_seq', 9, true);
 
 
 --
--- TOC entry 3226 (class 0 OID 0)
--- Dependencies: 220
+-- TOC entry 3253 (class 0 OID 0)
+-- Dependencies: 205
 -- Name: api_project_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
@@ -1134,8 +1263,8 @@ SELECT pg_catalog.setval('public.api_project_id_seq', 4, true);
 
 
 --
--- TOC entry 3227 (class 0 OID 0)
--- Dependencies: 226
+-- TOC entry 3254 (class 0 OID 0)
+-- Dependencies: 207
 -- Name: api_projectcollaborator_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
@@ -1143,8 +1272,8 @@ SELECT pg_catalog.setval('public.api_projectcollaborator_id_seq', 3, true);
 
 
 --
--- TOC entry 3228 (class 0 OID 0)
--- Dependencies: 222
+-- TOC entry 3255 (class 0 OID 0)
+-- Dependencies: 209
 -- Name: api_projectlist_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
@@ -1152,35 +1281,44 @@ SELECT pg_catalog.setval('public.api_projectlist_id_seq', 5, true);
 
 
 --
--- TOC entry 3229 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 3256 (class 0 OID 0)
+-- Dependencies: 211
 -- Name: api_projectpaper_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.api_projectpaper_id_seq', 3, true);
+SELECT pg_catalog.setval('public.api_projectpaper_id_seq', 12, true);
 
 
 --
--- TOC entry 3230 (class 0 OID 0)
--- Dependencies: 234
+-- TOC entry 3257 (class 0 OID 0)
+-- Dependencies: 214
 -- Name: api_task_assignees_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.api_task_assignees_id_seq', 3, true);
+SELECT pg_catalog.setval('public.api_task_assignees_id_seq', 5, true);
 
 
 --
--- TOC entry 3231 (class 0 OID 0)
--- Dependencies: 232
+-- TOC entry 3258 (class 0 OID 0)
+-- Dependencies: 215
 -- Name: api_task_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.api_task_id_seq', 3, true);
+SELECT pg_catalog.setval('public.api_task_id_seq', 13, true);
 
 
 --
--- TOC entry 3232 (class 0 OID 0)
--- Dependencies: 214
+-- TOC entry 3259 (class 0 OID 0)
+-- Dependencies: 236
+-- Name: api_taskdependency_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
+--
+
+SELECT pg_catalog.setval('public.api_taskdependency_id_seq', 11, true);
+
+
+--
+-- TOC entry 3260 (class 0 OID 0)
+-- Dependencies: 218
 -- Name: api_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
@@ -1188,8 +1326,8 @@ SELECT pg_catalog.setval('public.api_user_groups_id_seq', 1, false);
 
 
 --
--- TOC entry 3233 (class 0 OID 0)
--- Dependencies: 212
+-- TOC entry 3261 (class 0 OID 0)
+-- Dependencies: 219
 -- Name: api_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
@@ -1197,8 +1335,8 @@ SELECT pg_catalog.setval('public.api_user_id_seq', 3, true);
 
 
 --
--- TOC entry 3234 (class 0 OID 0)
--- Dependencies: 216
+-- TOC entry 3262 (class 0 OID 0)
+-- Dependencies: 221
 -- Name: api_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
@@ -1206,8 +1344,8 @@ SELECT pg_catalog.setval('public.api_user_user_permissions_id_seq', 1, false);
 
 
 --
--- TOC entry 3235 (class 0 OID 0)
--- Dependencies: 208
+-- TOC entry 3263 (class 0 OID 0)
+-- Dependencies: 223
 -- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
@@ -1215,8 +1353,8 @@ SELECT pg_catalog.setval('public.auth_group_id_seq', 1, false);
 
 
 --
--- TOC entry 3236 (class 0 OID 0)
--- Dependencies: 210
+-- TOC entry 3264 (class 0 OID 0)
+-- Dependencies: 225
 -- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
@@ -1224,43 +1362,52 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
 
 
 --
--- TOC entry 3237 (class 0 OID 0)
--- Dependencies: 206
+-- TOC entry 3265 (class 0 OID 0)
+-- Dependencies: 227
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 56, true);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 64, true);
 
 
 --
--- TOC entry 3238 (class 0 OID 0)
--- Dependencies: 228
+-- TOC entry 3266 (class 0 OID 0)
+-- Dependencies: 230
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 23, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 47, true);
 
 
 --
--- TOC entry 3239 (class 0 OID 0)
--- Dependencies: 204
+-- TOC entry 3267 (class 0 OID 0)
+-- Dependencies: 232
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.django_content_type_id_seq', 14, true);
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 16, true);
 
 
 --
--- TOC entry 3240 (class 0 OID 0)
--- Dependencies: 202
+-- TOC entry 3268 (class 0 OID 0)
+-- Dependencies: 234
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 24, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 29, true);
 
 
 --
--- TOC entry 2986 (class 2606 OID 16499)
+-- TOC entry 3043 (class 2606 OID 16770)
+-- Name: api_note api_note_pkey; Type: CONSTRAINT; Schema: public; Owner: user
+--
+
+ALTER TABLE ONLY public.api_note
+    ADD CONSTRAINT api_note_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2959 (class 2606 OID 16507)
 -- Name: api_paper api_paper_doi_key; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1269,7 +1416,7 @@ ALTER TABLE ONLY public.api_paper
 
 
 --
--- TOC entry 2988 (class 2606 OID 16497)
+-- TOC entry 2961 (class 2606 OID 16509)
 -- Name: api_paper api_paper_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1278,7 +1425,7 @@ ALTER TABLE ONLY public.api_paper
 
 
 --
--- TOC entry 2990 (class 2606 OID 16510)
+-- TOC entry 2963 (class 2606 OID 16511)
 -- Name: api_project api_project_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1287,7 +1434,7 @@ ALTER TABLE ONLY public.api_project
 
 
 --
--- TOC entry 3000 (class 2606 OID 16534)
+-- TOC entry 2966 (class 2606 OID 16513)
 -- Name: api_projectcollaborator api_projectcollaborator_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1296,7 +1443,7 @@ ALTER TABLE ONLY public.api_projectcollaborator
 
 
 --
--- TOC entry 2992 (class 2606 OID 16518)
+-- TOC entry 2969 (class 2606 OID 16515)
 -- Name: api_projectlist api_projectlist_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1305,7 +1452,7 @@ ALTER TABLE ONLY public.api_projectlist
 
 
 --
--- TOC entry 2997 (class 2606 OID 16526)
+-- TOC entry 2974 (class 2606 OID 16517)
 -- Name: api_projectpaper api_projectpaper_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1314,7 +1461,7 @@ ALTER TABLE ONLY public.api_projectpaper
 
 
 --
--- TOC entry 3020 (class 2606 OID 16658)
+-- TOC entry 2980 (class 2606 OID 16519)
 -- Name: api_task_assignees api_task_assignees_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1323,7 +1470,7 @@ ALTER TABLE ONLY public.api_task_assignees
 
 
 --
--- TOC entry 3024 (class 2606 OID 16672)
+-- TOC entry 2984 (class 2606 OID 16521)
 -- Name: api_task_assignees api_task_assignees_task_id_projectcollaborator_id_cd4b9818_uniq; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1332,7 +1479,7 @@ ALTER TABLE ONLY public.api_task_assignees
 
 
 --
--- TOC entry 3016 (class 2606 OID 16650)
+-- TOC entry 2976 (class 2606 OID 16523)
 -- Name: api_task api_task_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1341,7 +1488,16 @@ ALTER TABLE ONLY public.api_task
 
 
 --
--- TOC entry 2974 (class 2606 OID 16478)
+-- TOC entry 3040 (class 2606 OID 16689)
+-- Name: api_taskdependency api_taskdependency_pkey; Type: CONSTRAINT; Schema: public; Owner: user
+--
+
+ALTER TABLE ONLY public.api_taskdependency
+    ADD CONSTRAINT api_taskdependency_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2992 (class 2606 OID 16525)
 -- Name: api_user_groups api_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1350,7 +1506,7 @@ ALTER TABLE ONLY public.api_user_groups
 
 
 --
--- TOC entry 2977 (class 2606 OID 16537)
+-- TOC entry 2995 (class 2606 OID 16527)
 -- Name: api_user_groups api_user_groups_user_id_group_id_9c7ddfb5_uniq; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1359,7 +1515,7 @@ ALTER TABLE ONLY public.api_user_groups
 
 
 --
--- TOC entry 2968 (class 2606 OID 16468)
+-- TOC entry 2986 (class 2606 OID 16529)
 -- Name: api_user api_user_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1368,7 +1524,7 @@ ALTER TABLE ONLY public.api_user
 
 
 --
--- TOC entry 2980 (class 2606 OID 16486)
+-- TOC entry 2998 (class 2606 OID 16531)
 -- Name: api_user_user_permissions api_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1377,7 +1533,7 @@ ALTER TABLE ONLY public.api_user_user_permissions
 
 
 --
--- TOC entry 2983 (class 2606 OID 16551)
+-- TOC entry 3001 (class 2606 OID 16533)
 -- Name: api_user_user_permissions api_user_user_permissions_user_id_permission_id_a06dd704_uniq; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1386,7 +1542,7 @@ ALTER TABLE ONLY public.api_user_user_permissions
 
 
 --
--- TOC entry 2971 (class 2606 OID 16470)
+-- TOC entry 2989 (class 2606 OID 16535)
 -- Name: api_user api_user_username_key; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1395,7 +1551,7 @@ ALTER TABLE ONLY public.api_user
 
 
 --
--- TOC entry 2958 (class 2606 OID 16456)
+-- TOC entry 3004 (class 2606 OID 16537)
 -- Name: auth_group auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1404,7 +1560,7 @@ ALTER TABLE ONLY public.auth_group
 
 
 --
--- TOC entry 2963 (class 2606 OID 16442)
+-- TOC entry 3009 (class 2606 OID 16539)
 -- Name: auth_group_permissions auth_group_permissions_group_id_permission_id_0cd325b0_uniq; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1413,7 +1569,7 @@ ALTER TABLE ONLY public.auth_group_permissions
 
 
 --
--- TOC entry 2966 (class 2606 OID 16431)
+-- TOC entry 3012 (class 2606 OID 16541)
 -- Name: auth_group_permissions auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1422,7 +1578,7 @@ ALTER TABLE ONLY public.auth_group_permissions
 
 
 --
--- TOC entry 2960 (class 2606 OID 16421)
+-- TOC entry 3006 (class 2606 OID 16543)
 -- Name: auth_group auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1431,7 +1587,7 @@ ALTER TABLE ONLY public.auth_group
 
 
 --
--- TOC entry 2953 (class 2606 OID 16433)
+-- TOC entry 3015 (class 2606 OID 16545)
 -- Name: auth_permission auth_permission_content_type_id_codename_01ab375a_uniq; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1440,7 +1596,7 @@ ALTER TABLE ONLY public.auth_permission
 
 
 --
--- TOC entry 2955 (class 2606 OID 16413)
+-- TOC entry 3017 (class 2606 OID 16547)
 -- Name: auth_permission auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1449,7 +1605,7 @@ ALTER TABLE ONLY public.auth_permission
 
 
 --
--- TOC entry 3012 (class 2606 OID 16634)
+-- TOC entry 3020 (class 2606 OID 16549)
 -- Name: authtoken_token authtoken_token_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1458,7 +1614,7 @@ ALTER TABLE ONLY public.authtoken_token
 
 
 --
--- TOC entry 3014 (class 2606 OID 16636)
+-- TOC entry 3022 (class 2606 OID 16551)
 -- Name: authtoken_token authtoken_token_user_id_key; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1467,7 +1623,7 @@ ALTER TABLE ONLY public.authtoken_token
 
 
 --
--- TOC entry 3004 (class 2606 OID 16606)
+-- TOC entry 3025 (class 2606 OID 16553)
 -- Name: django_admin_log django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1476,7 +1632,7 @@ ALTER TABLE ONLY public.django_admin_log
 
 
 --
--- TOC entry 2948 (class 2606 OID 16405)
+-- TOC entry 3028 (class 2606 OID 16555)
 -- Name: django_content_type django_content_type_app_label_model_76bd3d3b_uniq; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1485,7 +1641,7 @@ ALTER TABLE ONLY public.django_content_type
 
 
 --
--- TOC entry 2950 (class 2606 OID 16403)
+-- TOC entry 3030 (class 2606 OID 16557)
 -- Name: django_content_type django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1494,7 +1650,7 @@ ALTER TABLE ONLY public.django_content_type
 
 
 --
--- TOC entry 2946 (class 2606 OID 16395)
+-- TOC entry 3032 (class 2606 OID 16559)
 -- Name: django_migrations django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1503,7 +1659,7 @@ ALTER TABLE ONLY public.django_migrations
 
 
 --
--- TOC entry 3008 (class 2606 OID 16626)
+-- TOC entry 3035 (class 2606 OID 16561)
 -- Name: django_session django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1512,7 +1668,15 @@ ALTER TABLE ONLY public.django_session
 
 
 --
--- TOC entry 2984 (class 1259 OID 16564)
+-- TOC entry 3041 (class 1259 OID 16736)
+-- Name: api_note_creator_id_id_394e6615; Type: INDEX; Schema: public; Owner: user
+--
+
+CREATE INDEX api_note_creator_id_id_394e6615 ON public.api_note USING btree (creator_id);
+
+
+--
+-- TOC entry 2957 (class 1259 OID 16562)
 -- Name: api_paper_doi_0cc7a2e7_like; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1520,7 +1684,7 @@ CREATE INDEX api_paper_doi_0cc7a2e7_like ON public.api_paper USING btree (doi va
 
 
 --
--- TOC entry 2998 (class 1259 OID 16593)
+-- TOC entry 2964 (class 1259 OID 16563)
 -- Name: api_projectcollaborator_collaborator_id_d1fb635f; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1528,7 +1692,7 @@ CREATE INDEX api_projectcollaborator_collaborator_id_d1fb635f ON public.api_proj
 
 
 --
--- TOC entry 3001 (class 1259 OID 16594)
+-- TOC entry 2967 (class 1259 OID 16564)
 -- Name: api_projectcollaborator_project_id_f4fb87e6; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1536,7 +1700,7 @@ CREATE INDEX api_projectcollaborator_project_id_f4fb87e6 ON public.api_projectco
 
 
 --
--- TOC entry 2993 (class 1259 OID 16570)
+-- TOC entry 2970 (class 1259 OID 16565)
 -- Name: api_projectlist_project_id_d9e8ea7d; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1544,7 +1708,7 @@ CREATE INDEX api_projectlist_project_id_d9e8ea7d ON public.api_projectlist USING
 
 
 --
--- TOC entry 2994 (class 1259 OID 16581)
+-- TOC entry 2971 (class 1259 OID 16566)
 -- Name: api_projectpaper_list_id_6b0c4e68; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1552,7 +1716,7 @@ CREATE INDEX api_projectpaper_list_id_6b0c4e68 ON public.api_projectpaper USING 
 
 
 --
--- TOC entry 2995 (class 1259 OID 16582)
+-- TOC entry 2972 (class 1259 OID 16567)
 -- Name: api_projectpaper_paper_id_83fe75a8; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1560,7 +1724,7 @@ CREATE INDEX api_projectpaper_paper_id_83fe75a8 ON public.api_projectpaper USING
 
 
 --
--- TOC entry 3021 (class 1259 OID 16684)
+-- TOC entry 2981 (class 1259 OID 16568)
 -- Name: api_task_assignees_projectcollaborator_id_3464d049; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1568,7 +1732,7 @@ CREATE INDEX api_task_assignees_projectcollaborator_id_3464d049 ON public.api_ta
 
 
 --
--- TOC entry 3022 (class 1259 OID 16683)
+-- TOC entry 2982 (class 1259 OID 16569)
 -- Name: api_task_assignees_task_id_692b56f6; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1576,7 +1740,7 @@ CREATE INDEX api_task_assignees_task_id_692b56f6 ON public.api_task_assignees US
 
 
 --
--- TOC entry 3017 (class 1259 OID 16669)
+-- TOC entry 2977 (class 1259 OID 16570)
 -- Name: api_task_project_id_8e1d0a15; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1584,7 +1748,7 @@ CREATE INDEX api_task_project_id_8e1d0a15 ON public.api_task USING btree (projec
 
 
 --
--- TOC entry 3018 (class 1259 OID 16670)
+-- TOC entry 2978 (class 1259 OID 16571)
 -- Name: api_task_project_paper_id_7c142334; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1592,7 +1756,23 @@ CREATE INDEX api_task_project_paper_id_7c142334 ON public.api_task USING btree (
 
 
 --
--- TOC entry 2972 (class 1259 OID 16549)
+-- TOC entry 3037 (class 1259 OID 16700)
+-- Name: api_taskdependency_after_id_a99d92c9; Type: INDEX; Schema: public; Owner: user
+--
+
+CREATE INDEX api_taskdependency_after_id_a99d92c9 ON public.api_taskdependency USING btree (after_id);
+
+
+--
+-- TOC entry 3038 (class 1259 OID 16701)
+-- Name: api_taskdependency_before_id_e2735fe0; Type: INDEX; Schema: public; Owner: user
+--
+
+CREATE INDEX api_taskdependency_before_id_e2735fe0 ON public.api_taskdependency USING btree (before_id);
+
+
+--
+-- TOC entry 2990 (class 1259 OID 16572)
 -- Name: api_user_groups_group_id_3af85785; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1600,7 +1780,7 @@ CREATE INDEX api_user_groups_group_id_3af85785 ON public.api_user_groups USING b
 
 
 --
--- TOC entry 2975 (class 1259 OID 16548)
+-- TOC entry 2993 (class 1259 OID 16573)
 -- Name: api_user_groups_user_id_a5ff39fa; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1608,7 +1788,7 @@ CREATE INDEX api_user_groups_user_id_a5ff39fa ON public.api_user_groups USING bt
 
 
 --
--- TOC entry 2978 (class 1259 OID 16563)
+-- TOC entry 2996 (class 1259 OID 16574)
 -- Name: api_user_user_permissions_permission_id_305b7fea; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1616,7 +1796,7 @@ CREATE INDEX api_user_user_permissions_permission_id_305b7fea ON public.api_user
 
 
 --
--- TOC entry 2981 (class 1259 OID 16562)
+-- TOC entry 2999 (class 1259 OID 16575)
 -- Name: api_user_user_permissions_user_id_f3945d65; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1624,7 +1804,7 @@ CREATE INDEX api_user_user_permissions_user_id_f3945d65 ON public.api_user_user_
 
 
 --
--- TOC entry 2969 (class 1259 OID 16535)
+-- TOC entry 2987 (class 1259 OID 16576)
 -- Name: api_user_username_cf4e88d2_like; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1632,7 +1812,7 @@ CREATE INDEX api_user_username_cf4e88d2_like ON public.api_user USING btree (use
 
 
 --
--- TOC entry 2956 (class 1259 OID 16457)
+-- TOC entry 3002 (class 1259 OID 16577)
 -- Name: auth_group_name_a6ea08ec_like; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1640,7 +1820,7 @@ CREATE INDEX auth_group_name_a6ea08ec_like ON public.auth_group USING btree (nam
 
 
 --
--- TOC entry 2961 (class 1259 OID 16453)
+-- TOC entry 3007 (class 1259 OID 16578)
 -- Name: auth_group_permissions_group_id_b120cbf9; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1648,7 +1828,7 @@ CREATE INDEX auth_group_permissions_group_id_b120cbf9 ON public.auth_group_permi
 
 
 --
--- TOC entry 2964 (class 1259 OID 16454)
+-- TOC entry 3010 (class 1259 OID 16579)
 -- Name: auth_group_permissions_permission_id_84c5c92e; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1656,7 +1836,7 @@ CREATE INDEX auth_group_permissions_permission_id_84c5c92e ON public.auth_group_
 
 
 --
--- TOC entry 2951 (class 1259 OID 16439)
+-- TOC entry 3013 (class 1259 OID 16580)
 -- Name: auth_permission_content_type_id_2f476e4b; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1664,7 +1844,7 @@ CREATE INDEX auth_permission_content_type_id_2f476e4b ON public.auth_permission 
 
 
 --
--- TOC entry 3010 (class 1259 OID 16642)
+-- TOC entry 3018 (class 1259 OID 16581)
 -- Name: authtoken_token_key_10f0b77e_like; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1672,7 +1852,7 @@ CREATE INDEX authtoken_token_key_10f0b77e_like ON public.authtoken_token USING b
 
 
 --
--- TOC entry 3002 (class 1259 OID 16617)
+-- TOC entry 3023 (class 1259 OID 16582)
 -- Name: django_admin_log_content_type_id_c4bce8eb; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1680,7 +1860,7 @@ CREATE INDEX django_admin_log_content_type_id_c4bce8eb ON public.django_admin_lo
 
 
 --
--- TOC entry 3005 (class 1259 OID 16618)
+-- TOC entry 3026 (class 1259 OID 16583)
 -- Name: django_admin_log_user_id_c564eba6; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1688,7 +1868,7 @@ CREATE INDEX django_admin_log_user_id_c564eba6 ON public.django_admin_log USING 
 
 
 --
--- TOC entry 3006 (class 1259 OID 16628)
+-- TOC entry 3033 (class 1259 OID 16584)
 -- Name: django_session_expire_date_a5c62663; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1696,7 +1876,7 @@ CREATE INDEX django_session_expire_date_a5c62663 ON public.django_session USING 
 
 
 --
--- TOC entry 3009 (class 1259 OID 16627)
+-- TOC entry 3036 (class 1259 OID 16585)
 -- Name: django_session_session_key_c0390e0f_like; Type: INDEX; Schema: public; Owner: user
 --
 
@@ -1704,7 +1884,25 @@ CREATE INDEX django_session_session_key_c0390e0f_like ON public.django_session U
 
 
 --
--- TOC entry 3035 (class 2606 OID 16583)
+-- TOC entry 3065 (class 2606 OID 16781)
+-- Name: api_note api_note_creator_id_ef904ef3_fk_api_user_id; Type: FK CONSTRAINT; Schema: public; Owner: user
+--
+
+ALTER TABLE ONLY public.api_note
+    ADD CONSTRAINT api_note_creator_id_ef904ef3_fk_api_user_id FOREIGN KEY (creator_id) REFERENCES public.api_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3066 (class 2606 OID 16786)
+-- Name: api_note api_note_id_b72fdfc9_fk_api_projectpaper_id; Type: FK CONSTRAINT; Schema: public; Owner: user
+--
+
+ALTER TABLE ONLY public.api_note
+    ADD CONSTRAINT api_note_id_b72fdfc9_fk_api_projectpaper_id FOREIGN KEY (id) REFERENCES public.api_projectpaper(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3044 (class 2606 OID 16586)
 -- Name: api_projectcollaborator api_projectcollaborator_collaborator_id_d1fb635f_fk_api_user_id; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1713,7 +1911,7 @@ ALTER TABLE ONLY public.api_projectcollaborator
 
 
 --
--- TOC entry 3036 (class 2606 OID 16588)
+-- TOC entry 3045 (class 2606 OID 16591)
 -- Name: api_projectcollaborator api_projectcollaborator_project_id_f4fb87e6_fk_api_project_id; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1722,7 +1920,7 @@ ALTER TABLE ONLY public.api_projectcollaborator
 
 
 --
--- TOC entry 3032 (class 2606 OID 16565)
+-- TOC entry 3046 (class 2606 OID 16596)
 -- Name: api_projectlist api_projectlist_project_id_d9e8ea7d_fk_api_project_id; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1731,7 +1929,7 @@ ALTER TABLE ONLY public.api_projectlist
 
 
 --
--- TOC entry 3033 (class 2606 OID 16571)
+-- TOC entry 3047 (class 2606 OID 16601)
 -- Name: api_projectpaper api_projectpaper_list_id_6b0c4e68_fk_api_projectlist_id; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1740,7 +1938,7 @@ ALTER TABLE ONLY public.api_projectpaper
 
 
 --
--- TOC entry 3034 (class 2606 OID 16576)
+-- TOC entry 3048 (class 2606 OID 16606)
 -- Name: api_projectpaper api_projectpaper_paper_id_83fe75a8_fk_api_paper_id; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1749,7 +1947,7 @@ ALTER TABLE ONLY public.api_projectpaper
 
 
 --
--- TOC entry 3043 (class 2606 OID 16678)
+-- TOC entry 3051 (class 2606 OID 16611)
 -- Name: api_task_assignees api_task_assignees_projectcollaborator__3464d049_fk_api_proje; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1758,7 +1956,7 @@ ALTER TABLE ONLY public.api_task_assignees
 
 
 --
--- TOC entry 3042 (class 2606 OID 16673)
+-- TOC entry 3052 (class 2606 OID 16616)
 -- Name: api_task_assignees api_task_assignees_task_id_692b56f6_fk_api_task_id; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1767,7 +1965,7 @@ ALTER TABLE ONLY public.api_task_assignees
 
 
 --
--- TOC entry 3040 (class 2606 OID 16659)
+-- TOC entry 3049 (class 2606 OID 16621)
 -- Name: api_task api_task_project_id_8e1d0a15_fk_api_project_id; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1776,7 +1974,7 @@ ALTER TABLE ONLY public.api_task
 
 
 --
--- TOC entry 3041 (class 2606 OID 16685)
+-- TOC entry 3050 (class 2606 OID 16626)
 -- Name: api_task api_task_project_paper_id_7c142334_fk_api_projectpaper_id; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1785,7 +1983,25 @@ ALTER TABLE ONLY public.api_task
 
 
 --
--- TOC entry 3029 (class 2606 OID 16543)
+-- TOC entry 3063 (class 2606 OID 16690)
+-- Name: api_taskdependency api_taskdependency_after_id_a99d92c9_fk_api_task_id; Type: FK CONSTRAINT; Schema: public; Owner: user
+--
+
+ALTER TABLE ONLY public.api_taskdependency
+    ADD CONSTRAINT api_taskdependency_after_id_a99d92c9_fk_api_task_id FOREIGN KEY (after_id) REFERENCES public.api_task(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3064 (class 2606 OID 16695)
+-- Name: api_taskdependency api_taskdependency_before_id_e2735fe0_fk_api_task_id; Type: FK CONSTRAINT; Schema: public; Owner: user
+--
+
+ALTER TABLE ONLY public.api_taskdependency
+    ADD CONSTRAINT api_taskdependency_before_id_e2735fe0_fk_api_task_id FOREIGN KEY (before_id) REFERENCES public.api_task(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- TOC entry 3053 (class 2606 OID 16631)
 -- Name: api_user_groups api_user_groups_group_id_3af85785_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1794,7 +2010,7 @@ ALTER TABLE ONLY public.api_user_groups
 
 
 --
--- TOC entry 3028 (class 2606 OID 16538)
+-- TOC entry 3054 (class 2606 OID 16636)
 -- Name: api_user_groups api_user_groups_user_id_a5ff39fa_fk_api_user_id; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1803,7 +2019,7 @@ ALTER TABLE ONLY public.api_user_groups
 
 
 --
--- TOC entry 3031 (class 2606 OID 16557)
+-- TOC entry 3055 (class 2606 OID 16641)
 -- Name: api_user_user_permissions api_user_user_permis_permission_id_305b7fea_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1812,7 +2028,7 @@ ALTER TABLE ONLY public.api_user_user_permissions
 
 
 --
--- TOC entry 3030 (class 2606 OID 16552)
+-- TOC entry 3056 (class 2606 OID 16646)
 -- Name: api_user_user_permissions api_user_user_permissions_user_id_f3945d65_fk_api_user_id; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1821,7 +2037,7 @@ ALTER TABLE ONLY public.api_user_user_permissions
 
 
 --
--- TOC entry 3027 (class 2606 OID 16448)
+-- TOC entry 3057 (class 2606 OID 16651)
 -- Name: auth_group_permissions auth_group_permissio_permission_id_84c5c92e_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1830,7 +2046,7 @@ ALTER TABLE ONLY public.auth_group_permissions
 
 
 --
--- TOC entry 3026 (class 2606 OID 16443)
+-- TOC entry 3058 (class 2606 OID 16656)
 -- Name: auth_group_permissions auth_group_permissions_group_id_b120cbf9_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1839,7 +2055,7 @@ ALTER TABLE ONLY public.auth_group_permissions
 
 
 --
--- TOC entry 3025 (class 2606 OID 16434)
+-- TOC entry 3059 (class 2606 OID 16661)
 -- Name: auth_permission auth_permission_content_type_id_2f476e4b_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1848,7 +2064,7 @@ ALTER TABLE ONLY public.auth_permission
 
 
 --
--- TOC entry 3039 (class 2606 OID 16637)
+-- TOC entry 3060 (class 2606 OID 16666)
 -- Name: authtoken_token authtoken_token_user_id_35299eff_fk_api_user_id; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1857,7 +2073,7 @@ ALTER TABLE ONLY public.authtoken_token
 
 
 --
--- TOC entry 3037 (class 2606 OID 16607)
+-- TOC entry 3061 (class 2606 OID 16671)
 -- Name: django_admin_log django_admin_log_content_type_id_c4bce8eb_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1866,7 +2082,7 @@ ALTER TABLE ONLY public.django_admin_log
 
 
 --
--- TOC entry 3038 (class 2606 OID 16612)
+-- TOC entry 3062 (class 2606 OID 16676)
 -- Name: django_admin_log django_admin_log_user_id_c564eba6_fk_api_user_id; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -1874,7 +2090,7 @@ ALTER TABLE ONLY public.django_admin_log
     ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk_api_user_id FOREIGN KEY (user_id) REFERENCES public.api_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- Completed on 2022-07-16 11:10:39 +06
+-- Completed on 2022-08-12 12:37:25 +06
 
 --
 -- PostgreSQL database dump complete

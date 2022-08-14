@@ -10,10 +10,12 @@ router = DefaultRouter()
 router.register(r'papers', views.PaperViewset)
 router.register(r'projects', views.ProjectViewset, basename='Project')
 router.register(r'tasks', views.TaskViewset, basename='Task')
+router.register(r'notes', views.NoteViewset, basename='Note')
 
 project_router = NestedSimpleRouter(router, r'projects', lookup='project')
 project_router.register(r'lists', views.ProjectListViewset, basename='lists')
 project_router.register(r'collaborators', views.ProjectCollaboratorViewset, basename='collaborators')
+project_router.register(r'papers', views.ProjectPaperViewset, basename='papers')
 
 
 urlpatterns = [
