@@ -274,14 +274,28 @@ class VenueSchedule(models.Model):
     def is_ongoing(self):
         return (self.start is None or timezone.now() >= self.start) and timezone.now() < self.end
 
-
-    # def save(self, *args, **kwargs):
-    #     if self.start is None and self.end is not None:
-    #         self.start = self.end
-    #     super(VenueSchedule, self).save(*args, **kwargs)
-
     def __str__(self):
         return f"{self.id}-{self.activity}-v({self.venue})"
 
 
-# TODO: Upload
+class FileUpload(models.Model):
+    STATUS_CHOICES = [
+        ('DRAFT', 'Draft'),
+        ('ACTIVE', 'Active'),
+    ]
+    CONTENT_CHOICES = [
+        ('ABSTRACT', 'Abstract'),
+        ('MANUSCRIPT', 'Manuscript'),
+    ]
+
+    file = models.FileField()
+    upload_date = models.DateTimeField(auto_now_add=True, blank=True)
+    content = models.CharField(max_length=64, choices=CONTENT_CHOICES, blank=False)
+    status = models.CharField(max_length=64, choices=STATUS_CHOICES, default='DRAFT', blank=True)
+    name = models.CharField(max_length=256)
+
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False)
+    uploader = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+
+    def __str__(self):
+        return f"{self.id}-{self.name}-{self.content}-p({self.project})"

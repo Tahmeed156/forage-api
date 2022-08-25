@@ -202,3 +202,20 @@ class SubmissionSerializer(DynamicFieldsModelSerializer):
         model = Submission
         fields = ('name', 'project', 'venue', 'status', 'submitted', 'comments', 'reviewers', 
                   'activities', 'ongoing_activity')
+
+
+class FileUploadSerializer(DynamicFieldsModelSerializer):
+    file = serializers.FileField()
+    project = ProjectSerializer(fields=['id', 'name'], read_only=True)
+    project_id = serializers.IntegerField(write_only=True)
+    uploader = UserSerializer(fields=['id', 'username'], read_only=True)
+
+
+    def create(self, validated_data):
+        validated_data['uploader'] = self.context.get('request').user
+        return super().create(validated_data)
+
+
+    class Meta:
+        model = FileUpload
+        fields = ('id', 'file', 'upload_date', 'status', 'content', 'name', 'project', 'project_id', 'uploader')

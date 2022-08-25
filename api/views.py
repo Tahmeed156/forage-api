@@ -289,3 +289,39 @@ class SubmissionCommentViewset(viewsets.GenericViewSet,
 
     def get_queryset(self):
         return SubmissionComment.objects.filter(submission_id=self.kwargs['submissions_pk'])
+
+
+class FileUploadView(viewsets.GenericViewSet, 
+                     mixins.ListModelMixin, 
+                     mixins.RetrieveModelMixin, 
+                     mixins.CreateModelMixin,):
+    serializer_class = FileUploadSerializer
+    filterset_fields = ['content', 'status', 'project', 'uploader']
+    queryset = FileUpload.objects.all()
+
+    def create(self, request):
+        file_uploaded = request.FILES.get('file')
+        content_type = file_uploaded.content_type
+        print(file_uploaded, content_type)
+
+        return super().create(request)
+
+
+    @action(detail=True, methods=['PUT'])
+    def set_active(self, request, pk):
+        file_upload_new = FileUpload.objects.get(id=pk)
+
+        # Set all others under project as draft
+        file_upload_actives = FileUpload.objects.filter(
+            project_id=file_upload_new.project_id,
+            content=file_upload_new.content,
+            status='ACTIVE'
+        ).all()
+        for fu in file_upload_actives:
+            fu.status = 'DRAFT'
+            fu.save()
+
+        file_upload_new.status = 'ACTIVE'
+        file_upload_new.save()
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
