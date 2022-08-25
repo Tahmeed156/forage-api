@@ -135,12 +135,23 @@ class NoteSerializer(DynamicFieldsModelSerializer):
         fields = ('id', 'text', 'visibility', 'last_modified', 'creator', 'project_paper')
 
 
+class VenueScheduleSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = VenueSchedule
+        fields = ('id', 'activity', 'start', 'end')
+
+
 class VenueSerializer(DynamicFieldsModelSerializer):
     reviewers = UserSerializer(fields=['id', 'username'], many=True)
+    schedule = serializers.SerializerMethodField()
+
+    def get_schedule(self, instance):
+        schedule = instance.schedule.all().order_by('end')
+        return VenueScheduleSerializer(schedule, fields=['activity', 'start', 'end'], many=True).data
 
     class Meta:
         model = Venue
-        fields = ('id', 'name', 'website', 'reviewers')
+        fields = ('id', 'name', 'website', 'reviewers', 'schedule')
 
 
 class ConferenceSerializer(DynamicFieldsModelSerializer):

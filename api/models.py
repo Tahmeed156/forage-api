@@ -230,12 +230,20 @@ class SubmissionComment(models.Model):
         return f"{self.id}-sub{self.submission.id}-{self.text[:20]}"
 
 
-# class VenueSchedule(models.Model):
-#     # Venue
-#     # Task
-#     # Start
-#     # End
-#     pass
+class VenueSchedule(models.Model):
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='schedule')
+    activity = models.CharField(max_length=256)
+    start = models.DateTimeField(null=True, blank=True)
+    end = models.DateTimeField()
+
+
+    def save(self, *args, **kwargs):
+        if self.start is None and self.end is not None:
+            self.start = self.end
+        super(VenueSchedule, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.id}-{self.activity}-v({self.venue})"
 
 
 # TODO: Upload
