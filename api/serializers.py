@@ -147,7 +147,7 @@ class VenueSerializer(DynamicFieldsModelSerializer):
 
     def get_schedule(self, instance):
         schedule = instance.schedule.all().order_by('end')
-        return VenueScheduleSerializer(schedule, fields=['activity', 'start', 'end'], many=True).data
+        return VenueScheduleSerializer(schedule, many=True).data
 
     class Meta:
         model = Venue
@@ -184,7 +184,21 @@ class SubmissionSerializer(DynamicFieldsModelSerializer):
     venue = VenueSerializer(fields=['id', 'name'], read_only=True)
     comments = SubmissionCommentSerializer(fields=['id', 'user', 'text'], read_only=True, many=True)
     reviewers = UserSerializer(fields=['id', 'username'], many=True, read_only=True)
+    activities = serializers.SerializerMethodField()
+    ongoing_activity = serializers.SerializerMethodField()
+
+
+    def get_activities(self, instance):
+        activity_instances = instance.venue.schedule.all()
+        return VenueScheduleSerializer(activity_instances, many=True).data
+
+
+    def get_ongoing_activity(self, instance):
+        activity_instance = instance.get_ongoing_activity()
+        return VenueScheduleSerializer(activity_instance).data
+
 
     class Meta:
         model = Submission
-        fields = ('name', 'project', 'venue', 'status', 'submitted', 'comments', 'reviewers')
+        fields = ('name', 'project', 'venue', 'status', 'submitted', 'comments', 'reviewers', 
+                  'activities', 'ongoing_activity')

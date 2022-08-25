@@ -5,6 +5,7 @@ from forage import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from django.utils import timezone
 
 
 class User(AbstractUser):
@@ -36,6 +37,13 @@ class Project(models.Model):
     @classmethod
     def get_user_projects(cls, user):
         return cls.objects.filter(collaborators__id=user.id).all()
+
+
+    def get_ongoing_submission(self):
+        # Assume no more than one submission currently ongoing
+        # TODO: Refactor hardcoded status
+        submission = Submission.objects.filter(project=self, status='ONGOING').first()
+        return submission
 
 
     @classmethod
@@ -206,16 +214,40 @@ class Journal(Venue):
 
 
 class Submission(models.Model):
+    STATUS_CHOICES = [
+        ('UPCOMING', 'Upcoming'),
+        ('ONGOING', 'Ongoing'),
+        ('ACCEPTED', 'Accepted'),
+        ('REJECTED', 'Rejected'),
+    ]
+
     name = models.CharField(max_length=256)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False)
     venue = models.ForeignKey(Venue, on_delete=models.PROTECT, null=True)
-    status = models.CharField(max_length=128, blank=True)
+    # TODO: Change Ongoing after venue has passed
+    status = models.CharField(max_length=128, blank=True, choices=STATUS_CHOICES)
     submitted = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 
     reviewers = models.ManyToManyField(User, related_name='review_papers', blank=True)
 
+
+    @property
+    def is_ongoing(self):
+        return self.status == 'ONGOING'
+
+
+    def get_ongoing_activity(self):
+        activity_list = VenueSchedule.objects.filter(venue=self.venue).order_by('end').all()
+        for activity in activity_list:
+            if activity.start is None:
+                return activity
+            if timezone.now() >= activity.start:
+                return activity
+        return None
+
+
     def __str__(self):
-        return f"{self.id}-{self.project.name}-{self.venue.name}"
+        return f"{self.id}-p({self.project.name})-v({self.venue.name})"
 
 
 class SubmissionComment(models.Model):
@@ -235,12 +267,17 @@ class VenueSchedule(models.Model):
     activity = models.CharField(max_length=256)
     start = models.DateTimeField(null=True, blank=True)
     end = models.DateTimeField()
+    
+
+    @property
+    def is_ongoing(self):
+        return (self.start is None or timezone.now() >= self.start) and timezone.now() < self.end
 
 
-    def save(self, *args, **kwargs):
-        if self.start is None and self.end is not None:
-            self.start = self.end
-        super(VenueSchedule, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self.start is None and self.end is not None:
+    #         self.start = self.end
+    #     super(VenueSchedule, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.id}-{self.activity}-v({self.venue})"
