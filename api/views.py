@@ -249,7 +249,8 @@ class SubmissionViewset(viewsets.GenericViewSet,
                         mixins.ListModelMixin, 
                         mixins.RetrieveModelMixin):
     serializer_class = SubmissionSerializer
-    filterset_fields = ['project']
+    filterset_fields = ['project', 'reviewers']    
+    ordering = ['venue']
 
 
     def get_queryset(self):
@@ -261,6 +262,9 @@ class SubmissionCommentViewset(viewsets.GenericViewSet,
                                mixins.CreateModelMixin, 
                                mixins.RetrieveModelMixin):
     serializer_class = SubmissionCommentSerializer
+    ordering = ['-datetime']
+    filterset_fields = ['reviewer_thread']
+
 
     def get_queryset(self):
         return SubmissionComment.objects.filter(submission_id=self.kwargs['submissions_pk'])

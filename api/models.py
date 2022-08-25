@@ -206,10 +206,13 @@ class Journal(Venue):
 
 
 class Submission(models.Model):
+    name = models.CharField(max_length=256)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False)
     venue = models.ForeignKey(Venue, on_delete=models.PROTECT, null=True)
     status = models.CharField(max_length=128, blank=True)
     submitted = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+
+    reviewers = models.ManyToManyField(User, related_name='review_papers', blank=True)
 
     def __str__(self):
         return f"{self.id}-{self.project.name}-{self.venue.name}"
@@ -217,10 +220,11 @@ class Submission(models.Model):
 
 class SubmissionComment(models.Model):
     # Type (Author/Reviewer)
-    submission = models.ForeignKey(Submission, on_delete=models.PROTECT, null=True, related_name='comments')
+    submission = models.ForeignKey(Submission, on_delete=models.PROTECT, related_name='comments')
     reviewer_thread = models.ForeignKey(User, on_delete=models.PROTECT, related_name=None)
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='submission_comments')
     text = models.TextField()
+    datetime = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.id}-sub{self.submission.id}-{self.text[:20]}"

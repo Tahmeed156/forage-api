@@ -5,7 +5,7 @@
 -- Dumped from database version 12.5
 -- Dumped by pg_dump version 12.11 (Ubuntu 12.11-0ubuntu0.20.04.1)
 
--- Started on 2022-08-14 16:22:52 +06
+-- Started on 2022-08-14 16:37:10 +06
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -387,7 +387,8 @@ CREATE TABLE public.api_submissioncomment (
     text text NOT NULL,
     user_id bigint NOT NULL,
     reviewer_thread_id bigint NOT NULL,
-    submission_id bigint
+    submission_id bigint NOT NULL,
+    datetime timestamp with time zone NOT NULL
 );
 
 
@@ -1311,8 +1312,9 @@ INSERT INTO public.api_submission VALUES (2, 'Start', '2022-08-14 14:20:33+06', 
 -- Data for Name: api_submissioncomment; Type: TABLE DATA; Schema: public; Owner: user
 --
 
-INSERT INTO public.api_submissioncomment VALUES (1, 'Very informative', 1, 2, 1);
-INSERT INTO public.api_submissioncomment VALUES (8, 'New thing', 1, 2, 1);
+INSERT INTO public.api_submissioncomment VALUES (8, 'New thing', 1, 2, 1, '2022-08-14 16:29:22.3272+06');
+INSERT INTO public.api_submissioncomment VALUES (9, 'New comment', 1, 1, 1, '2022-08-14 16:30:12.957994+06');
+INSERT INTO public.api_submissioncomment VALUES (1, 'Very informative', 1, 2, 1, '2022-08-14 16:21:22.3272+06');
 
 
 --
@@ -1656,6 +1658,7 @@ INSERT INTO public.django_migrations VALUES (32, 'api', '0008_keyword_paper_keyw
 INSERT INTO public.django_migrations VALUES (33, 'api', '0009_venue_reviewers_submissioncomment_submission', '2022-08-14 13:40:34.066976+06');
 INSERT INTO public.django_migrations VALUES (34, 'api', '0010_submissioncomment_reviewer_thread_and_more', '2022-08-14 14:42:47.297706+06');
 INSERT INTO public.django_migrations VALUES (35, 'api', '0011_alter_submission_submitted', '2022-08-14 14:42:47.323282+06');
+INSERT INTO public.django_migrations VALUES (36, 'api', '0012_submissioncomment_datetime_and_more', '2022-08-14 16:29:22.398239+06');
 
 
 --
@@ -1748,7 +1751,7 @@ SELECT pg_catalog.setval('public.api_submission_id_seq', 2, true);
 -- Name: api_submissioncomment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.api_submissioncomment_id_seq', 8, true);
+SELECT pg_catalog.setval('public.api_submissioncomment_id_seq', 9, true);
 
 
 --
@@ -1874,7 +1877,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 22, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 35, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 36, true);
 
 
 --
@@ -2686,7 +2689,7 @@ ALTER TABLE ONLY public.api_submissioncomment
 
 
 --
--- TOC entry 3161 (class 2606 OID 16956)
+-- TOC entry 3161 (class 2606 OID 16965)
 -- Name: api_submissioncomment api_submissioncommen_submission_id_3a3ef2b6_fk_api_submi; Type: FK CONSTRAINT; Schema: public; Owner: user
 --
 
@@ -2865,7 +2868,7 @@ ALTER TABLE ONLY public.django_admin_log
     ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk_api_user_id FOREIGN KEY (user_id) REFERENCES public.api_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- Completed on 2022-08-14 16:22:53 +06
+-- Completed on 2022-08-14 16:37:10 +06
 
 --
 -- PostgreSQL database dump complete
