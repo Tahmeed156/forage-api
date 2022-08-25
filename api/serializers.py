@@ -135,12 +135,23 @@ class NoteSerializer(DynamicFieldsModelSerializer):
         fields = ('id', 'text', 'visibility', 'last_modified', 'creator', 'project_paper')
 
 
+class VenueScheduleSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = VenueSchedule
+        fields = ('id', 'activity', 'start', 'end')
+
+
 class VenueSerializer(DynamicFieldsModelSerializer):
     reviewers = UserSerializer(fields=['id', 'username'], many=True)
+    schedule = serializers.SerializerMethodField()
+
+    def get_schedule(self, instance):
+        schedule = instance.schedule.all().order_by('end')
+        return VenueScheduleSerializer(schedule, many=True).data
 
     class Meta:
         model = Venue
-        fields = ('id', 'name', 'website', 'reviewers')
+        fields = ('id', 'name', 'website', 'reviewers', 'schedule')
 
 
 class ConferenceSerializer(DynamicFieldsModelSerializer):
@@ -170,10 +181,43 @@ class SubmissionCommentSerializer(DynamicFieldsModelSerializer):
 
 class SubmissionSerializer(DynamicFieldsModelSerializer):
     project = ProjectSerializer(fields=['id', 'name'], read_only=True)
+    project_id = serializers.IntegerField(write_only=True)
     venue = VenueSerializer(fields=['id', 'name'], read_only=True)
+    venue_id = serializers.IntegerField(write_only=True)
     comments = SubmissionCommentSerializer(fields=['id', 'user', 'text'], read_only=True, many=True)
     reviewers = UserSerializer(fields=['id', 'username'], many=True, read_only=True)
+    activities = serializers.SerializerMethodField()
+    ongoing_activity = serializers.SerializerMethodField()
+
+
+    def get_activities(self, instance):
+        activity_instances = instance.venue.schedule.all()
+        return VenueScheduleSerializer(activity_instances, many=True).data
+
+
+    def get_ongoing_activity(self, instance):
+        activity_instance = instance.get_ongoing_activity()
+        return VenueScheduleSerializer(activity_instance).data
+
 
     class Meta:
         model = Submission
-        fields = ('name', 'project', 'venue', 'status', 'submitted', 'comments', 'reviewers')
+        fields = ('id', 'name', 'project', 'project_id', 'venue', 'venue_id', 'status', 
+                  'submitted', 'comments', 'reviewers', 'activities', 'ongoing_activity')
+
+
+class FileUploadSerializer(DynamicFieldsModelSerializer):
+    file = serializers.FileField()
+    project = ProjectSerializer(fields=['id', 'name'], read_only=True)
+    project_id = serializers.IntegerField(write_only=True)
+    uploader = UserSerializer(fields=['id', 'username'], read_only=True)
+
+
+    def create(self, validated_data):
+        validated_data['uploader'] = self.context.get('request').user
+        return super().create(validated_data)
+
+
+    class Meta:
+        model = FileUpload
+        fields = ('id', 'file', 'upload_date', 'status', 'content', 'name', 'project', 'project_id', 'uploader')

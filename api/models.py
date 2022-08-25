@@ -5,6 +5,7 @@ from forage import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from django.utils import timezone
 
 
 class User(AbstractUser):
@@ -36,6 +37,13 @@ class Project(models.Model):
     @classmethod
     def get_user_projects(cls, user):
         return cls.objects.filter(collaborators__id=user.id).all()
+
+
+    def get_ongoing_submission(self):
+        # Assume no more than one submission currently ongoing
+        # TODO: Refactor hardcoded status
+        submission = Submission.objects.filter(project=self, status='ONGOING').first()
+        return submission
 
 
     @classmethod
@@ -83,9 +91,10 @@ class ProjectList(models.Model):  # FIXME: Change name
 
 
 class Venue(models.Model):
-    # TODO: Date published
     name = models.CharField(max_length=256)
     website = models.CharField(max_length=256, null=True, blank=True)
+    start = models.DateTimeField()
+    end = models.DateTimeField()
 
     reviewers = models.ManyToManyField(User, related_name='venues')
 
@@ -206,16 +215,40 @@ class Journal(Venue):
 
 
 class Submission(models.Model):
+    STATUS_CHOICES = [
+        ('UPCOMING', 'Upcoming'),
+        ('ONGOING', 'Ongoing'),
+        ('ACCEPTED', 'Accepted'),
+        ('REJECTED', 'Rejected'),
+    ]
+
     name = models.CharField(max_length=256)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False)
     venue = models.ForeignKey(Venue, on_delete=models.PROTECT, null=True)
-    status = models.CharField(max_length=128, blank=True)
+    # TODO: Change Ongoing after venue has passed
+    status = models.CharField(max_length=128, blank=True, choices=STATUS_CHOICES)
     submitted = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 
     reviewers = models.ManyToManyField(User, related_name='review_papers', blank=True)
 
+
+    @property
+    def is_ongoing(self):
+        return self.status == 'ONGOING'
+
+
+    def get_ongoing_activity(self):
+        activity_list = VenueSchedule.objects.filter(venue=self.venue).order_by('end').all()
+        for activity in activity_list:
+            if activity.start is None:
+                return activity
+            if timezone.now() >= activity.start:
+                return activity
+        return None
+
+
     def __str__(self):
-        return f"{self.id}-{self.project.name}-{self.venue.name}"
+        return f"{self.id}-p({self.project.name})-v({self.venue.name})"
 
 
 class SubmissionComment(models.Model):
@@ -230,12 +263,39 @@ class SubmissionComment(models.Model):
         return f"{self.id}-sub{self.submission.id}-{self.text[:20]}"
 
 
-# class VenueSchedule(models.Model):
-#     # Venue
-#     # Task
-#     # Start
-#     # End
-#     pass
+class VenueSchedule(models.Model):
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='schedule')
+    activity = models.CharField(max_length=256)
+    start = models.DateTimeField(null=True, blank=True)
+    end = models.DateTimeField()
+    
+
+    @property
+    def is_ongoing(self):
+        return (self.start is None or timezone.now() >= self.start) and timezone.now() < self.end
+
+    def __str__(self):
+        return f"{self.id}-{self.activity}-v({self.venue})"
 
 
-# TODO: Upload
+class FileUpload(models.Model):
+    STATUS_CHOICES = [
+        ('DRAFT', 'Draft'),
+        ('ACTIVE', 'Active'),
+    ]
+    CONTENT_CHOICES = [
+        ('ABSTRACT', 'Abstract'),
+        ('MANUSCRIPT', 'Manuscript'),
+    ]
+
+    file = models.FileField()
+    upload_date = models.DateTimeField(auto_now_add=True, blank=True)
+    content = models.CharField(max_length=64, choices=CONTENT_CHOICES, blank=False)
+    status = models.CharField(max_length=64, choices=STATUS_CHOICES, default='DRAFT', blank=True)
+    name = models.CharField(max_length=256)
+
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False)
+    uploader = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+
+    def __str__(self):
+        return f"{self.id}-{self.name}-{self.content}-p({self.project})"

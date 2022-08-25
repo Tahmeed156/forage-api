@@ -4,6 +4,8 @@ from rest_framework_nested.routers import NestedSimpleRouter
 from django.contrib import admin
 from api import views
 from rest_framework.authtoken.views import obtain_auth_token
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 router = DefaultRouter()
@@ -13,11 +15,13 @@ router.register(r'submissions', views.SubmissionViewset, basename='Submission')
 router.register(r'tasks', views.TaskViewset, basename='Task')
 router.register(r'notes', views.NoteViewset, basename='Note')
 router.register(r'venues', views.VenueViewset, basename='Venue')
+router.register(r'files', views.FileUploadView, basename='File')
 
 project_router = NestedSimpleRouter(router, r'projects', lookup='projects')
 project_router.register(r'lists', views.ProjectListViewset, basename='lists')
 project_router.register(r'collaborators', views.ProjectCollaboratorViewset, basename='collaborators')
 project_router.register(r'papers', views.ProjectPaperViewset, basename='papers')
+project_router.register(r'submissions', views.ProjectSubmissionViewset, basename='submissions')
 
 submission_router = NestedSimpleRouter(router, r'submissions', lookup='submissions')
 submission_router.register(r'comments', views.SubmissionCommentViewset, basename='comments')
@@ -34,5 +38,6 @@ urlpatterns = [
     path('extension/collaborator-to-paper/', views.extension_collaborator_to_paper, name='extension-collaborator-to-paper'),
 
     path('admin/', admin.site.urls),
-    path('auth/token/', obtain_auth_token)
-]
+    path('auth/token/', obtain_auth_token),
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
