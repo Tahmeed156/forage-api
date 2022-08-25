@@ -156,7 +156,7 @@ class JournalSerializer(DynamicFieldsModelSerializer):
 
 
 class SubmissionCommentSerializer(DynamicFieldsModelSerializer):
-    user = UserSerializer(fields=['id', 'name'], read_only=True)
+    user = UserSerializer(fields=['id', 'username'], read_only=True)
     submission_id = serializers.IntegerField(write_only=True)
 
     def create(self, validated_data):
@@ -172,7 +172,8 @@ class SubmissionSerializer(DynamicFieldsModelSerializer):
     project = ProjectSerializer(fields=['id', 'name'], read_only=True)
     venue = VenueSerializer(fields=['id', 'name'], read_only=True)
     comments = SubmissionCommentSerializer(fields=['id', 'user', 'text'], read_only=True, many=True)
+    reviewers = UserSerializer(fields=['id', 'username'], many=True, read_only=True)
 
     class Meta:
         model = Submission
-        fields = ('project', 'venue', 'status', 'submitted', 'comments')
+        fields = ('name', 'project', 'venue', 'status', 'submitted', 'comments', 'reviewers')

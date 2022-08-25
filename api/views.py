@@ -249,7 +249,8 @@ class SubmissionViewset(viewsets.GenericViewSet,
                         mixins.ListModelMixin, 
                         mixins.RetrieveModelMixin):
     serializer_class = SubmissionSerializer
-    filterset_fields = ['project']
+    filterset_fields = ['project', 'reviewers']    
+    ordering = ['venue']
 
 
     def get_queryset(self):

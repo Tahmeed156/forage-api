@@ -206,10 +206,13 @@ class Journal(Venue):
 
 
 class Submission(models.Model):
+    name = models.CharField(max_length=256)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False)
     venue = models.ForeignKey(Venue, on_delete=models.PROTECT, null=True)
     status = models.CharField(max_length=128, blank=True)
     submitted = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+
+    reviewers = models.ManyToManyField(User, related_name='review_papers', blank=True)
 
     def __str__(self):
         return f"{self.id}-{self.project.name}-{self.venue.name}"
