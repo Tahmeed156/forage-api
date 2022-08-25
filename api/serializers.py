@@ -181,7 +181,9 @@ class SubmissionCommentSerializer(DynamicFieldsModelSerializer):
 
 class SubmissionSerializer(DynamicFieldsModelSerializer):
     project = ProjectSerializer(fields=['id', 'name'], read_only=True)
+    project_id = serializers.IntegerField(write_only=True)
     venue = VenueSerializer(fields=['id', 'name'], read_only=True)
+    venue_id = serializers.IntegerField(write_only=True)
     comments = SubmissionCommentSerializer(fields=['id', 'user', 'text'], read_only=True, many=True)
     reviewers = UserSerializer(fields=['id', 'username'], many=True, read_only=True)
     activities = serializers.SerializerMethodField()
@@ -200,8 +202,8 @@ class SubmissionSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = Submission
-        fields = ('name', 'project', 'venue', 'status', 'submitted', 'comments', 'reviewers', 
-                  'activities', 'ongoing_activity')
+        fields = ('id', 'name', 'project', 'project_id', 'venue', 'venue_id', 'status', 
+                  'submitted', 'comments', 'reviewers', 'activities', 'ongoing_activity')
 
 
 class FileUploadSerializer(DynamicFieldsModelSerializer):

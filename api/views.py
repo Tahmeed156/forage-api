@@ -263,9 +263,12 @@ class VenueViewset(viewsets.GenericViewSet,
                    mixins.RetrieveModelMixin):
     serializer_class = VenueSerializer
     queryset = Venue.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
 
 
 class SubmissionViewset(viewsets.GenericViewSet, 
+                        mixins.CreateModelMixin,
                         mixins.ListModelMixin, 
                         mixins.RetrieveModelMixin):
     serializer_class = SubmissionSerializer
