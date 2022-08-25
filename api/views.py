@@ -238,6 +238,26 @@ class ProjectPaperViewset(viewsets.GenericViewSet,
         return ProjectPaper.objects.filter(list__project__id=self.kwargs['projects_pk'])
 
 
+class ProjectSubmissionViewset(viewsets.GenericViewSet, 
+                               mixins.ListModelMixin, 
+                               mixins.RetrieveModelMixin):
+    serializer_class = SubmissionSerializer
+    ordering_fields = ['venue', 'venue__start', 'venue__end']
+    ordering = ['venue__end']
+
+
+    def get_queryset(self):
+        return Submission.objects.filter(project__id=self.kwargs['projects_pk'])
+
+
+    @action(detail=False, methods=['GET'])
+    def ongoing(self, request, projects_pk):
+        sub_instance = Project.objects.get(id=projects_pk).get_ongoing_submission()
+
+        serializer = SubmissionSerializer(sub_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class VenueViewset(viewsets.GenericViewSet, 
                    mixins.ListModelMixin,
                    mixins.RetrieveModelMixin):
@@ -249,8 +269,9 @@ class SubmissionViewset(viewsets.GenericViewSet,
                         mixins.ListModelMixin, 
                         mixins.RetrieveModelMixin):
     serializer_class = SubmissionSerializer
-    filterset_fields = ['project', 'reviewers']    
-    ordering = ['venue']
+    filterset_fields = ['project', 'reviewers']
+    ordering_fields = ['venue', 'venue__start', 'venue__end']
+    ordering = ['venue__end']
 
 
     def get_queryset(self):

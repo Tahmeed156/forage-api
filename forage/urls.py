@@ -18,6 +18,7 @@ project_router = NestedSimpleRouter(router, r'projects', lookup='projects')
 project_router.register(r'lists', views.ProjectListViewset, basename='lists')
 project_router.register(r'collaborators', views.ProjectCollaboratorViewset, basename='collaborators')
 project_router.register(r'papers', views.ProjectPaperViewset, basename='papers')
+project_router.register(r'submissions', views.ProjectSubmissionViewset, basename='submissions')
 
 submission_router = NestedSimpleRouter(router, r'submissions', lookup='submissions')
 submission_router.register(r'comments', views.SubmissionCommentViewset, basename='comments')

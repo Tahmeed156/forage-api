@@ -91,9 +91,10 @@ class ProjectList(models.Model):  # FIXME: Change name
 
 
 class Venue(models.Model):
-    # TODO: Date published
     name = models.CharField(max_length=256)
     website = models.CharField(max_length=256, null=True, blank=True)
+    start = models.DateTimeField()
+    end = models.DateTimeField()
 
     reviewers = models.ManyToManyField(User, related_name='venues')
 
