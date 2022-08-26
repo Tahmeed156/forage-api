@@ -127,8 +127,9 @@ class Venue(models.Model):
     domains = models.ManyToManyField(Domain, related_name='venues')
 
 
-    def save(self, *args, **kwargs):
-        self.name = self.name.lower()
+    @classmethod
+    def get_venue_suggestions_for_project(cls, project_id):
+        return cls.objects.filter(keywords__projects__id=project_id).distinct().all()
 
 
     def __str__(self):

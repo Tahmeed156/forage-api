@@ -267,6 +267,14 @@ class VenueViewset(viewsets.GenericViewSet,
     search_fields = ['name']
 
 
+    @action(detail=False, methods=['GET'])
+    def suggest(self, request):
+        venues = Venue.get_venue_suggestions_for_project(request.GET.get('project_id'))
+
+        serializer = VenueSerializer(venues, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class SubmissionViewset(viewsets.GenericViewSet, 
                         mixins.CreateModelMixin,
                         mixins.ListModelMixin, 
