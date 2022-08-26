@@ -135,23 +135,23 @@ class NoteSerializer(DynamicFieldsModelSerializer):
         fields = ('id', 'text', 'visibility', 'last_modified', 'creator', 'project_paper')
 
 
-class VenueScheduleSerializer(DynamicFieldsModelSerializer):
+class VenueActivitySerializer(DynamicFieldsModelSerializer):
     class Meta:
-        model = VenueSchedule
+        model = VenueActivity
         fields = ('id', 'activity', 'start', 'end')
 
 
 class VenueSerializer(DynamicFieldsModelSerializer):
     reviewers = UserSerializer(fields=['id', 'username'], many=True)
-    schedule = serializers.SerializerMethodField()
+    activities = serializers.SerializerMethodField()
 
-    def get_schedule(self, instance):
+    def get_activities(self, instance):
         schedule = instance.schedule.all().order_by('end')
-        return VenueScheduleSerializer(schedule, many=True).data
+        return VenueActivitySerializer(schedule, many=True).data
 
     class Meta:
         model = Venue
-        fields = ('id', 'name', 'website', 'reviewers', 'schedule')
+        fields = ('id', 'name', 'website', 'reviewers', 'activities')
 
 
 class ConferenceSerializer(DynamicFieldsModelSerializer):
@@ -192,12 +192,12 @@ class SubmissionSerializer(DynamicFieldsModelSerializer):
 
     def get_activities(self, instance):
         activity_instances = instance.venue.schedule.all()
-        return VenueScheduleSerializer(activity_instances, many=True).data
+        return VenueActivitySerializer(activity_instances, many=True).data
 
 
     def get_ongoing_activity(self, instance):
         activity_instance = instance.get_ongoing_activity()
-        return VenueScheduleSerializer(activity_instance).data
+        return VenueActivitySerializer(activity_instance).data
 
 
     class Meta:
@@ -221,3 +221,17 @@ class FileUploadSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = FileUpload
         fields = ('id', 'file', 'upload_date', 'status', 'content', 'name', 'project', 'project_id', 'uploader')
+
+
+class KeywordSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = Keyword
+        fields = ('id', 'name')
+
+
+class DomainSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = Domain
+        fields = ('id', 'name')
