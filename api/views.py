@@ -111,6 +111,14 @@ class PaperViewset(viewsets.GenericViewSet,
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+    @action(detail=True, methods=['GET'])
+    def relevant(self, request, pk):
+        paper_instances = Paper.objects.get(id=pk).get_relevant_papers()
+
+        serializer = PaperSerializer(paper_instances, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class ProjectViewset(viewsets.GenericViewSet, 
                      mixins.ListModelMixin,
                      mixins.RetrieveModelMixin):
@@ -265,6 +273,14 @@ class VenueViewset(viewsets.GenericViewSet,
     queryset = Venue.objects.all()
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']
+
+
+    @action(detail=False, methods=['GET'])
+    def suggest(self, request):
+        venues = Venue.get_venue_suggestions_for_project(request.GET.get('project_id'))
+
+        serializer = VenueSerializer(venues, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class SubmissionViewset(viewsets.GenericViewSet, 
