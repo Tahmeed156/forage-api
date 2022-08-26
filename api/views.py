@@ -111,6 +111,14 @@ class PaperViewset(viewsets.GenericViewSet,
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+    @action(detail=True, methods=['GET'])
+    def relevant(self, request, pk):
+        paper_instances = Paper.objects.get(id=pk).get_relevant_papers()
+
+        serializer = PaperSerializer(paper_instances, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class ProjectViewset(viewsets.GenericViewSet, 
                      mixins.ListModelMixin,
                      mixins.RetrieveModelMixin):

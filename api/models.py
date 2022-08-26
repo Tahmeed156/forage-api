@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.utils import timezone
+from django.db.models import Q
 
 
 class User(AbstractUser):
@@ -144,9 +145,20 @@ class Paper(models.Model):
     abstract = models.TextField(default="", blank=True)
     authors = models.CharField(max_length=1024)
 
-    keywords = models.ManyToManyField(Keyword)
+    keywords = models.ManyToManyField(Keyword, related_name='papers')
     venue = models.ForeignKey(Venue, on_delete=models.PROTECT, null=True)
     lists = models.ManyToManyField(ProjectList, through='ProjectPaper')
+
+
+    def get_relevant_papers(self):
+        # TODO: Handle if venue is none
+
+        papers = Paper.objects.filter(
+            Q(venue_id=self.venue_id) 
+            | Q(keywords__papers__id=self.id)
+        ).exclude(pk=self.id).distinct().all()
+
+        return papers
 
 
     def __str__(self):
