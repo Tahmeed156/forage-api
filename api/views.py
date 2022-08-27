@@ -230,6 +230,28 @@ class TaskViewset(viewsets.ModelViewSet):
     def get_queryset(self):
         return Task.objects.filter(project__collaborators__id=self.request.user.id)
 
+
+    @action(detail=True, methods=['POST', 'DELETE'])
+    def assignees(self, request, pk):
+        if request.method == 'POST':
+            task_ins = Task.objects.get(id=pk)
+            colab = ProjectCollaborator.objects.get(id=request.data.get('colab_id'))
+
+            task_ins.assignees.add(colab)
+            task_ins.save()
+            
+            serializer = TaskSerializer(task_ins)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        elif request.method == 'DELETE':
+            task_ins = Task.objects.get(id=pk)
+            colab = ProjectCollaborator.objects.get(id=request.data.get('colab_id'))
+
+            task_ins.assignees.remove(colab)
+            task_ins.save()
+            
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
     
     @action(detail=True, methods=['POST', 'DELETE'])
     def depends_on(self, request, pk):
@@ -251,7 +273,7 @@ class TaskViewset(viewsets.ModelViewSet):
             )
             task_dep_instance.save()
 
-            serializer = TaskDependencySerializer(task_dep_instance)
+            serializer = BeforeTaskSerializer(task_dep_instance)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         elif request.method == 'DELETE':
