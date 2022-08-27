@@ -200,7 +200,7 @@ class JournalSerializer(DynamicFieldsModelSerializer):
         fields = VenueSerializer.Meta.fields + ('issn',)
 
 
-class SubmissionCommentSerializer(DynamicFieldsModelSerializer):
+class SubmissionReplySerializer(DynamicFieldsModelSerializer):
     user = UserSerializer(fields=['id', 'username'], read_only=True)
     submission_id = serializers.IntegerField(write_only=True)
 
@@ -213,12 +213,21 @@ class SubmissionCommentSerializer(DynamicFieldsModelSerializer):
         fields = ('id', 'user', 'text', 'submission_id', 'reviewer_thread', 'datetime', 'highlight_metadata')
 
 
+class SubmissionCommentSerializer(SubmissionReplySerializer):
+    replies = SubmissionReplySerializer(read_only=True, many=True)
+
+
+    class Meta:
+        model = SubmissionComment
+        fields = SubmissionReplySerializer.Meta.fields + ('replies',)
+
+
 class SubmissionSerializer(DynamicFieldsModelSerializer):
     project = ProjectSerializer(fields=['id', 'name'], read_only=True)
     project_id = serializers.IntegerField(write_only=True)
     venue = VenueSerializer(fields=['id', 'name'], read_only=True)
     venue_id = serializers.IntegerField(write_only=True)
-    comments = SubmissionCommentSerializer(fields=['id', 'user', 'text'], read_only=True, many=True)
+    # comments = SubmissionCommentSerializer(fields=['id', 'user', 'text'], read_only=True, many=True)
     reviewers = UserSerializer(fields=['id', 'username'], many=True, read_only=True)
     activities = serializers.SerializerMethodField()
     ongoing_activity = serializers.SerializerMethodField()
@@ -237,7 +246,7 @@ class SubmissionSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Submission
         fields = ('id', 'name', 'project', 'project_id', 'venue', 'venue_id', 'status', 
-                  'submitted', 'comments', 'reviewers', 'activities', 'ongoing_activity')
+                  'submitted', 'reviewers', 'activities', 'ongoing_activity')
 
 
 class FileUploadSerializer(DynamicFieldsModelSerializer):

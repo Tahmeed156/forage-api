@@ -132,7 +132,12 @@ class Venue(models.Model):
 
     @classmethod
     def get_venue_suggestions_for_project(cls, project_id):
-        return cls.objects.filter(keywords__projects__id=project_id).distinct().all()
+        venues = cls.objects.filter(
+            Q(keywords__projects__id=project_id)
+            | Q(domains__projects__id=project_id)
+        ).distinct().all()
+
+        return venues
 
 
     def __str__(self):
@@ -153,8 +158,7 @@ class Paper(models.Model):
 
 
     def get_relevant_papers(self):
-        # TODO: Handle if venue is none
-
+        
         papers = Paper.objects.filter(
             Q(venue_id=self.venue_id) 
             | Q(keywords__papers__id=self.id)
@@ -289,6 +293,9 @@ class SubmissionComment(models.Model):
     text = models.TextField()
     datetime = models.DateTimeField(auto_now_add=True)
     highlight_metadata = models.JSONField(null=True, blank=True)
+
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+
 
     def __str__(self):
         return f"{self.id}-sub{self.submission.id}-{self.text[:20]}"

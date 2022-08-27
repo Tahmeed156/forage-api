@@ -354,7 +354,7 @@ class SubmissionCommentViewset(viewsets.GenericViewSet,
 
 
     def get_queryset(self):
-        return SubmissionComment.objects.filter(submission_id=self.kwargs['submissions_pk'])
+        return SubmissionComment.objects.filter(submission_id=self.kwargs['submissions_pk'], parent_id=None)
 
 
 class FileUploadView(viewsets.GenericViewSet, 
