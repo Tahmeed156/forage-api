@@ -269,3 +269,9 @@ class FileUploadSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = FileUpload
         fields = ('id', 'file', 'upload_date', 'status', 'content', 'name', 'project', 'project_id', 'uploader')
+
+
+class ReviewerProposalSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = ReviewerProposal
+        fields = ('id', 'reviewer', 'venue', 'sent', 'status')

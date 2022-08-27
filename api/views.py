@@ -1,7 +1,8 @@
-from ast import keyword
 from rest_framework.decorators import api_view, action, authentication_classes, permission_classes
 from rest_framework import status, viewsets, mixins, exceptions, filters
 from rest_framework.response import Response
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 from api.models import *
 from api.serializers import *
 
@@ -447,10 +448,6 @@ class UserViewset(viewsets.GenericViewSet,
     filter_backends = [filters.SearchFilter]
     search_fields = ['username']
 
-from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.authtoken.models import Token
-from rest_framework.response import Response
-
 
 class ForageAuthToken(ObtainAuthToken):
 
@@ -463,3 +460,18 @@ class ForageAuthToken(ObtainAuthToken):
             'token': token.key,
             'user': UserSerializer(user).data
         })
+
+
+class ReviewerProposalViewset(viewsets.GenericViewSet, 
+                              mixins.CreateModelMixin,
+                              mixins.ListModelMixin, 
+                              mixins.RetrieveModelMixin, 
+                              mixins.UpdateModelMixin):
+    serializer_class = ReviewerProposalSerializer
+    filterset_fields = ['reviewer_id', 'venue_id']
+    search_fields = ['username']
+
+
+    def get_queryset(self):
+        return ReviewerProposal.objects.filter(reviewer=self.request.user).all()
+

@@ -337,3 +337,20 @@ class FileUpload(models.Model):
 
     def __str__(self):
         return f"{self.id}-{self.name}-{self.content}-p({self.project})"
+
+
+class ReviewerProposal(models.Model):
+    STATUS_CHOICES = [
+        ('RECEIVED', 'Received'),
+        ('ACCEPTED', 'Accepted'),
+        ('REJECTED', 'Rejected'),
+    ]
+
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='proposals')
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='proposals')
+    sent = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=64, choices=STATUS_CHOICES, default='RECEIVED')
+
+
+    def __str__(self):
+        return f"{self.id}-{self.status}-r({self.reviewer})-v({self.venue})"
