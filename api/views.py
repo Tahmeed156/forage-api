@@ -344,3 +344,33 @@ class FileUploadView(viewsets.GenericViewSet,
         file_upload_new.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+
+class KeywordViewset(viewsets.GenericViewSet, 
+                     mixins.CreateModelMixin,
+                     mixins.ListModelMixin,
+                     mixins.RetrieveModelMixin):
+    serializer_class = KeywordSerializer
+    queryset = Keyword.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
+
+
+class DomainViewset(viewsets.GenericViewSet, 
+                    mixins.CreateModelMixin,
+                    mixins.ListModelMixin,
+                    mixins.RetrieveModelMixin):
+    serializer_class = DomainSerializer
+    queryset = Domain.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
+
+
+class UserViewset(viewsets.GenericViewSet, 
+                  mixins.CreateModelMixin,
+                  mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username']
