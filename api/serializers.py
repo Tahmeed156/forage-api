@@ -74,7 +74,7 @@ class ProjectPaperSerializer(DynamicFieldsModelSerializer):
 
 class ProjectSerializer(DynamicFieldsModelSerializer):
     collaborators = UserSerializer(fields=['id', 'username'], many=True, read_only=True)
-    lists = ProjectListSerializer(fields=['id', 'name'], many=True)
+    lists = ProjectListSerializer(fields=['id', 'name'], many=True, read_only=True)
     tasks = serializers.SerializerMethodField()
     keywords = serializers.SlugRelatedField(read_only=True, slug_field='name', many=True)
     domains = serializers.SlugRelatedField(read_only=True, slug_field='name', many=True)

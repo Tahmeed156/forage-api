@@ -123,8 +123,11 @@ class PaperViewset(viewsets.GenericViewSet,
 class ProjectViewset(viewsets.GenericViewSet, 
                      mixins.CreateModelMixin,
                      mixins.ListModelMixin,
+                     mixins.UpdateModelMixin,
                      mixins.RetrieveModelMixin):
     serializer_class = ProjectSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'collaborators__username']
 
 
     def get_queryset(self):
