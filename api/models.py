@@ -319,8 +319,15 @@ class SubmissionComment(models.Model):
 
 
 class VenueActivity(models.Model):
+    ACTIVITY_CHOICES = [
+        ('Abstract Submission', 'Abstract Submission'),
+        ('Manuscript Submission', 'Manuscript Submission'),
+        ('Peer Review', 'Peer Review'),
+        ('Final Decisions', 'Final Decisions'),
+    ]
+
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='schedule')
-    activity = models.CharField(max_length=256)
+    activity = models.CharField(max_length=256, choices=ACTIVITY_CHOICES)
     start = models.DateTimeField(null=True, blank=True)
     end = models.DateTimeField()
     
