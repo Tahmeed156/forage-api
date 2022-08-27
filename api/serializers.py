@@ -42,10 +42,17 @@ class ProjectListSerializer(DynamicFieldsModelSerializer):
 class ProjectPaperSerializer(DynamicFieldsModelSerializer):
     paper = PaperSerializer(fields=['id', 'name', 'authors', 'status'])
     list = serializers.SlugRelatedField(read_only=True, slug_field='name')
+    tasks = serializers.SerializerMethodField()
+
+
+    def get_tasks(self, instance):
+        from api.serializers import TaskSerializer
+        return TaskSerializer(instance.tasks, fields=['id', 'name'], many=True).data
+
 
     class Meta:
         model = ProjectPaper
-        fields = ('id', 'list', 'paper', 'paper_id', 'date_added')
+        fields = ('id', 'list', 'paper', 'paper_id', 'date_added', 'tasks')
 
 
 class ProjectSerializer(DynamicFieldsModelSerializer):
