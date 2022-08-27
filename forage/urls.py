@@ -18,6 +18,7 @@ router.register(r'files', views.FileUploadView, basename='File')
 router.register(r'keywords', views.KeywordViewset, basename='Keyword')
 router.register(r'domains', views.DomainViewset, basename='Domain')
 router.register(r'users', views.UserViewset, basename='User')
+router.register(r'reviewers', views.ReviewerViewset, basename='Reviewer')
 router.register(r'proposals', views.ReviewerProposalViewset, basename='ReviewerProposal')
 
 project_router = NestedSimpleRouter(router, r'projects', lookup='projects')

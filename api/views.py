@@ -475,3 +475,15 @@ class ReviewerProposalViewset(viewsets.GenericViewSet,
     def get_queryset(self):
         return ReviewerProposal.objects.filter(reviewer=self.request.user).all()
 
+
+class ReviewerViewset(viewsets.GenericViewSet,
+                      mixins.ListModelMixin, 
+                      mixins.RetrieveModelMixin, 
+                      mixins.UpdateModelMixin):
+    serializer_class = ReviewerSerializer
+    filterset_fields = ['user_id', 'venue_id', 'is_submitted']
+
+
+    def get_queryset(self):
+        return Reviewer.objects.filter(user=self.request.user).all()
+

@@ -275,3 +275,9 @@ class ReviewerProposalSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = ReviewerProposal
         fields = ('id', 'reviewer', 'venue', 'sent', 'status')
+
+
+class ReviewerSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Reviewer
+        fields = ('id', 'user', 'venue', 'review', 'is_submitted', 'submit_date')

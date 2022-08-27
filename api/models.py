@@ -125,7 +125,7 @@ class Venue(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField()
 
-    reviewers = models.ManyToManyField(User, related_name='venues')
+    reviewers = models.ManyToManyField(User, related_name='venues', through='Reviewer')
     keywords = models.ManyToManyField(Keyword, related_name='venues')
     domains = models.ManyToManyField(Domain, related_name='venues')
 
@@ -143,6 +143,23 @@ class Venue(models.Model):
     def __str__(self):
         return f"{self.id}-{self.name}"
 
+
+class Reviewer(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, null=False)
+    review = models.TextField(null=True, blank=True)
+    is_submitted = models.BooleanField(default=False)
+    submit_date = models.DateTimeField(null=True, blank=True)
+
+
+    def save(self, *args, **kwargs):
+        if self.is_submitted == True and self.submit_date is None:
+            self.submit_date = datetime.now()
+        super(Reviewer, self).save(*args, **kwargs)
+
+
+    def __str__(self):
+        return f"{self.id}-u({self.user})-v({self.venue})"
 
         
 class Paper(models.Model):
