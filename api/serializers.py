@@ -51,15 +51,19 @@ class UserSerializer(DynamicFieldsModelSerializer):
 
 
 class ProjectListSerializer(DynamicFieldsModelSerializer):
+    project_id = serializers.IntegerField(write_only=True)
+
     class Meta:
         model = ProjectList
-        fields = ('id', 'name', 'is_archived')
+        fields = ('id', 'name', 'is_archived', 'project_id')
 
 
 class ProjectPaperSerializer(DynamicFieldsModelSerializer):
-    paper = PaperSerializer(fields=['id', 'name', 'authors', 'status'])
+    paper = PaperSerializer(fields=['id', 'name', 'authors', 'status'], read_only=True)
+    # paper_id = serializers.IntegerField(write_only=True, allow_null=True)
     list = serializers.SlugRelatedField(read_only=True, slug_field='name')
-    tasks = serializers.SerializerMethodField()
+    list_id = serializers.IntegerField(write_only=True)
+    tasks = serializers.SerializerMethodField(read_only=True)
 
 
     def get_tasks(self, instance):
@@ -69,7 +73,7 @@ class ProjectPaperSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = ProjectPaper
-        fields = ('id', 'list', 'paper', 'paper_id', 'date_added', 'tasks')
+        fields = ('id', 'list', 'list_id', 'paper', 'date_added', 'tasks')
 
 
 class ProjectSerializer(DynamicFieldsModelSerializer):

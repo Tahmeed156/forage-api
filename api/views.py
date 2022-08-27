@@ -179,6 +179,8 @@ class ProjectViewset(viewsets.GenericViewSet,
 
 class ProjectListViewset(viewsets.GenericViewSet, 
                          mixins.ListModelMixin, 
+                         mixins.CreateModelMixin, 
+                         mixins.DestroyModelMixin, 
                          mixins.RetrieveModelMixin):
     serializer_class = ProjectListSerializer
 
@@ -286,6 +288,7 @@ class NoteViewset(viewsets.GenericViewSet,
 
 class ProjectPaperViewset(viewsets.GenericViewSet, 
                          mixins.ListModelMixin, 
+                         mixins.UpdateModelMixin, 
                          mixins.RetrieveModelMixin):
     serializer_class = ProjectPaperSerializer
 
