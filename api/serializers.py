@@ -30,7 +30,7 @@ class PaperSerializer(DynamicFieldsModelSerializer):
 class UserSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'date_of_birth', 'affiliation', 'designation')
+        fields = ('id', 'username', 'affiliation', 'designation', 'email', 'date_of_birth')
 
 
 class ProjectListSerializer(DynamicFieldsModelSerializer):

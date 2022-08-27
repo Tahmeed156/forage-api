@@ -3,7 +3,6 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_nested.routers import NestedSimpleRouter
 from django.contrib import admin
 from api import views
-from rest_framework.authtoken.views import obtain_auth_token
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -41,6 +40,6 @@ urlpatterns = [
     path('extension/collaborator-to-paper/', views.extension_collaborator_to_paper, name='extension-collaborator-to-paper'),
 
     path('admin/', admin.site.urls),
-    path('auth/token/', obtain_auth_token),
+    path('auth/token/', views.ForageAuthToken.as_view()),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
