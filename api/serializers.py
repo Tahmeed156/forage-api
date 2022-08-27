@@ -153,13 +153,20 @@ class TaskSerializer(DynamicFieldsModelSerializer):
 
 class NoteSerializer(DynamicFieldsModelSerializer):
     id = serializers.SerializerMethodField()
+    project_collaborators = serializers.SerializerMethodField()
+
+
+    def get_project_collaborators(self, instance):
+        return UserSerializer(instance.project_paper.list.project.collaborators, fields=['id', 'username'], many=True).data
+
 
     def get_id(self, instance):
         return instance.project_paper_id
 
+
     class Meta:
         model = Note
-        fields = ('id', 'text', 'visibility', 'last_modified', 'project_paper')
+        fields = ('id', 'text', 'visibility', 'last_modified', 'project_paper', 'project_collaborators')
 
 
 class VenueActivitySerializer(DynamicFieldsModelSerializer):
