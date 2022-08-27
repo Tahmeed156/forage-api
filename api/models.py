@@ -27,6 +27,7 @@ class Keyword(models.Model):
 
     def save(self, *args, **kwargs):
         self.name = self.name.lower()
+        super(Keyword, self).save(*args, **kwargs)
  
 
     def __str__(self):
@@ -39,6 +40,7 @@ class Domain(models.Model):
 
     def save(self, *args, **kwargs):
         self.name = self.name.lower()
+        super(Domain, self).save(*args, **kwargs)
  
 
     def __str__(self):

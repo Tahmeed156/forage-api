@@ -224,12 +224,14 @@ class FileUploadSerializer(DynamicFieldsModelSerializer):
 
 class KeywordSerializer(DynamicFieldsModelSerializer):
 
+
     class Meta:
         model = Keyword
         fields = ('id', 'name')
 
 
 class DomainSerializer(DynamicFieldsModelSerializer):
+
 
     class Meta:
         model = Domain
