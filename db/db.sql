@@ -5,7 +5,7 @@
 -- Dumped from database version 12.5
 -- Dumped by pg_dump version 12.12 (Ubuntu 12.12-0ubuntu0.20.04.1)
 
--- Started on 2022-08-26 11:09:45 +06
+-- Started on 2022-08-27 15:01:57 +06
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -583,7 +583,8 @@ CREATE TABLE public.api_submissioncomment (
     user_id bigint NOT NULL,
     reviewer_thread_id bigint NOT NULL,
     submission_id bigint NOT NULL,
-    datetime timestamp with time zone NOT NULL
+    datetime timestamp with time zone NOT NULL,
+    highlight_metadata jsonb
 );
 
 
@@ -1579,19 +1580,21 @@ ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('p
 -- Data for Name: api_domain; Type: TABLE DATA; Schema: public; Owner: user
 --
 
-INSERT INTO public.api_domain VALUES (1, 'Privacy & Security');
-INSERT INTO public.api_domain VALUES (3, 'Testing & Verification');
-INSERT INTO public.api_domain VALUES (4, 'Edge IOT Applications');
-INSERT INTO public.api_domain VALUES (2, 'Reliable Distributed Systems');
-INSERT INTO public.api_domain VALUES (5, 'Cloud Resource Management');
-INSERT INTO public.api_domain VALUES (6, 'Data Center Infrastructure');
-INSERT INTO public.api_domain VALUES (7, 'Storage Management');
-INSERT INTO public.api_domain VALUES (8, 'Scheduling & Optimization');
-INSERT INTO public.api_domain VALUES (9, 'Query Processing');
-INSERT INTO public.api_domain VALUES (10, 'Distributed & Parallel Databases');
-INSERT INTO public.api_domain VALUES (11, 'Big Data');
-INSERT INTO public.api_domain VALUES (12, 'Benchmarking & Performance Evaluation');
-INSERT INTO public.api_domain VALUES (13, 'Cellular & 5G Networks');
+INSERT INTO public.api_domain VALUES (1, 'privacy & security');
+INSERT INTO public.api_domain VALUES (3, 'testing & verification');
+INSERT INTO public.api_domain VALUES (4, 'edge iot applications');
+INSERT INTO public.api_domain VALUES (2, 'reliable distributed systems');
+INSERT INTO public.api_domain VALUES (5, 'cloud resource management');
+INSERT INTO public.api_domain VALUES (6, 'data center infrastructure');
+INSERT INTO public.api_domain VALUES (7, 'storage management');
+INSERT INTO public.api_domain VALUES (8, 'scheduling & optimization');
+INSERT INTO public.api_domain VALUES (9, 'query processing');
+INSERT INTO public.api_domain VALUES (10, 'distributed & parallel databases');
+INSERT INTO public.api_domain VALUES (11, 'big data');
+INSERT INTO public.api_domain VALUES (12, 'benchmarking & performance evaluation');
+INSERT INTO public.api_domain VALUES (13, 'cellular & 5g networks');
+INSERT INTO public.api_domain VALUES (15, 'machine learning');
+INSERT INTO public.api_domain VALUES (16, 'natural language processing');
 
 
 --
@@ -1643,8 +1646,8 @@ INSERT INTO public.api_keyword VALUES (13, 'mobile computing');
 -- Data for Name: api_note; Type: TABLE DATA; Schema: public; Owner: user
 --
 
-INSERT INTO public.api_note VALUES ('Nice', 'Private', '2022-08-12 12:21:07.056822+06', NULL, 12);
 INSERT INTO public.api_note VALUES ('', 'Public', '2022-08-12 12:21:12.149364+06', NULL, 11);
+INSERT INTO public.api_note VALUES ('Nice 2', 'Private', '2022-08-27 12:28:48.144303+06', NULL, 12);
 
 
 --
@@ -1778,10 +1781,10 @@ INSERT INTO public.api_submission_reviewers VALUES (4, 3, 2);
 -- Data for Name: api_submissioncomment; Type: TABLE DATA; Schema: public; Owner: user
 --
 
-INSERT INTO public.api_submissioncomment VALUES (8, 'New thing', 1, 2, 1, '2022-08-14 16:29:22.3272+06');
-INSERT INTO public.api_submissioncomment VALUES (9, 'New comment', 1, 1, 1, '2022-08-14 16:30:12.957994+06');
-INSERT INTO public.api_submissioncomment VALUES (1, 'Very informative', 1, 2, 1, '2022-08-14 16:21:22.3272+06');
-INSERT INTO public.api_submissioncomment VALUES (10, 'Very nice work done here', 1, 2, 2, '2022-08-26 02:27:26.452671+06');
+INSERT INTO public.api_submissioncomment VALUES (9, 'New comment', 1, 1, 1, '2022-08-14 16:30:12.957994+06', NULL);
+INSERT INTO public.api_submissioncomment VALUES (1, 'Very informative', 1, 2, 1, '2022-08-14 16:21:22.3272+06', NULL);
+INSERT INTO public.api_submissioncomment VALUES (10, 'Very nice work done here', 1, 2, 2, '2022-08-26 02:27:26.452671+06', NULL);
+INSERT INTO public.api_submissioncomment VALUES (8, 'New thing', 1, 2, 1, '2022-08-14 16:29:22.3272+06', '{"comment": {"text": "hello", "emoji": ""}, "content": {"text": "Contact Number: +8801833182774 ,"}, "position": {"rects": [{"x1": 352.4206237792969, "x2": 599.5476989746094, "y1": 372.2308654785156, "y2": 394.157958984375, "width": 824, "height": 1165.5741285174297, "pageNumber": 1}], "pageNumber": 1, "boundingRect": {"x1": 352.4206237792969, "x2": 599.5476989746094, "y1": 372.2308654785156, "y2": 394.157958984375, "width": 824, "height": 1165.5741285174297, "pageNumber": 1}}}');
 
 
 --
@@ -2273,6 +2276,8 @@ INSERT INTO public.django_migrations VALUES (41, 'api', '0016_venue_end_venue_st
 INSERT INTO public.django_migrations VALUES (42, 'api', '0017_fileupload', '2022-08-25 13:34:37.742253+06');
 INSERT INTO public.django_migrations VALUES (43, 'api', '0018_domain_rename_venueschedule_venueactivity_and_more', '2022-08-26 08:34:21.438166+06');
 INSERT INTO public.django_migrations VALUES (44, 'api', '0019_project_domains_project_keywords', '2022-08-26 09:40:09.647923+06');
+INSERT INTO public.django_migrations VALUES (45, 'api', '0020_submissioncomment_hightlight_pos_and_more', '2022-08-27 14:52:02.163893+06');
+INSERT INTO public.django_migrations VALUES (46, 'api', '0021_rename_hightlight_pos_submissioncomment_highlight_metadata', '2022-08-27 14:57:36.470503+06');
 
 
 --
@@ -2294,7 +2299,7 @@ INSERT INTO public.django_session VALUES ('r8pv1l8bbrrpxrkdqbtb39thbku5vt8m', '.
 -- Name: api_domain_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.api_domain_id_seq', 13, true);
+SELECT pg_catalog.setval('public.api_domain_id_seq', 16, true);
 
 
 --
@@ -2564,7 +2569,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 25, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 44, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 46, true);
 
 
 --
@@ -3910,7 +3915,7 @@ ALTER TABLE ONLY public.django_admin_log
     ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk_api_user_id FOREIGN KEY (user_id) REFERENCES public.api_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- Completed on 2022-08-26 11:09:46 +06
+-- Completed on 2022-08-27 15:01:57 +06
 
 --
 -- PostgreSQL database dump complete
