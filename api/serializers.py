@@ -27,6 +27,23 @@ class PaperSerializer(DynamicFieldsModelSerializer):
         fields = ('id', 'name', 'doi', 'abstract', 'authors', 'venue', 'venue_id', 'keywords')
 
 
+class KeywordSerializer(DynamicFieldsModelSerializer):
+
+
+    class Meta:
+        model = Keyword
+        fields = ('id', 'name')
+
+
+class DomainSerializer(DynamicFieldsModelSerializer):
+
+
+    class Meta:
+        model = Domain
+        fields = ('id', 'name')
+
+
+
 class UserSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = User
@@ -56,9 +73,12 @@ class ProjectPaperSerializer(DynamicFieldsModelSerializer):
 
 
 class ProjectSerializer(DynamicFieldsModelSerializer):
-    collaborators = UserSerializer(fields=['id', 'username'], many=True)
+    collaborators = UserSerializer(fields=['id', 'username'], many=True, read_only=True)
     lists = ProjectListSerializer(fields=['id', 'name'], many=True)
     tasks = serializers.SerializerMethodField()
+    keywords = serializers.SlugRelatedField(read_only=True, slug_field='name', many=True)
+    domains = serializers.SlugRelatedField(read_only=True, slug_field='name', many=True)
+
 
     def get_tasks(self, instance):
         from api.serializers import TaskSerializer
@@ -66,7 +86,8 @@ class ProjectSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('id', 'name', 'url', 'description', 'is_default', 'collaborators', 'lists', 'tasks')
+        fields = ('id', 'name', 'url', 'description', 'is_default', 'collaborators', 'lists', 'tasks', 
+                  'domains', 'keywords')
 
 
 class ProjectCollaboratorSerializer(DynamicFieldsModelSerializer):
@@ -227,19 +248,3 @@ class FileUploadSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = FileUpload
         fields = ('id', 'file', 'upload_date', 'status', 'content', 'name', 'project', 'project_id', 'uploader')
-
-
-class KeywordSerializer(DynamicFieldsModelSerializer):
-
-
-    class Meta:
-        model = Keyword
-        fields = ('id', 'name')
-
-
-class DomainSerializer(DynamicFieldsModelSerializer):
-
-
-    class Meta:
-        model = Domain
-        fields = ('id', 'name')

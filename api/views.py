@@ -1,3 +1,4 @@
+from ast import keyword
 from rest_framework.decorators import api_view, action, authentication_classes, permission_classes
 from rest_framework import status, viewsets, mixins, exceptions, filters
 from rest_framework.response import Response
@@ -120,6 +121,7 @@ class PaperViewset(viewsets.GenericViewSet,
 
 
 class ProjectViewset(viewsets.GenericViewSet, 
+                     mixins.CreateModelMixin,
                      mixins.ListModelMixin,
                      mixins.RetrieveModelMixin):
     serializer_class = ProjectSerializer
@@ -128,6 +130,48 @@ class ProjectViewset(viewsets.GenericViewSet,
     def get_queryset(self):
         # Should return the projects for the user only
         return Project.get_user_projects(self.request.user)
+
+
+    def create(self, request):
+        data = request.data
+
+        # Create project
+        project = Project(
+            name=data.get('name'),
+            description=data.get('description')
+        )
+        project.save()
+
+        # Create some lists by default
+        for list_name in ['Done', 'Next']:
+            project_list = ProjectList(
+                name=list_name,
+                project=project
+            )
+            project_list.save()
+
+        # Add collaborators to project
+        for colab_id in data.get('collaborators'):
+            user = User.objects.get(id=colab_id)
+            project_collaborator = ProjectCollaborator(
+                collaborator=user,
+                project=project,
+                role='Researcher'
+            )
+            project_collaborator.save()
+
+        # Add keywords to project
+        for keyword_id in data.get('keywords'):
+            k = Keyword.objects.get(id=keyword_id)
+            project.keywords.add(k)
+
+        # Add domains to project
+        for domain_id in data.get('domains'):
+            d = Domain.objects.get(id=domain_id)
+            project.domains.add(d)
+
+        serializer = ProjectSerializer(project)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ProjectListViewset(viewsets.GenericViewSet, 
