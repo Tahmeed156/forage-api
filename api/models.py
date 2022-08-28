@@ -256,7 +256,7 @@ class Submission(models.Model):
     ]
 
     name = models.CharField(max_length=256)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False, related_name='submissions')
     venue = models.ForeignKey(Venue, on_delete=models.PROTECT, null=True)
     # TODO: Change Ongoing after venue has passed
     status = models.CharField(max_length=128, blank=True, choices=STATUS_CHOICES)
@@ -356,7 +356,7 @@ class FileUpload(models.Model):
     status = models.CharField(max_length=64, choices=STATUS_CHOICES, default='DRAFT', blank=True)
     name = models.CharField(max_length=256)
 
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False, related_name='files')
     uploader = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
 
     def __str__(self):

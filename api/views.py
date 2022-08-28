@@ -210,11 +210,11 @@ class ProjectCollaboratorViewset(viewsets.GenericViewSet,
         return ProjectCollaborator.objects.filter(project_id=self.kwargs['projects_pk'])
 
     @action(detail=True, methods=['GET'])
-    def tasks(self, request, project_pk, pk):
+    def tasks(self, request, projects_pk, pk):
         project_clb_instance = ProjectCollaborator.objects.get(id=pk)
 
-        print(project_clb_instance.project_id, project_pk, pk)
-        if project_clb_instance.project_id != int(project_pk):
+        print(project_clb_instance.project_id, projects_pk, pk)
+        if project_clb_instance.project_id != int(projects_pk):
             raise exceptions.PermissionDenied("Collaborator not in project")
 
         task_instances = project_clb_instance.tasks.all()
@@ -225,6 +225,7 @@ class ProjectCollaboratorViewset(viewsets.GenericViewSet,
 class TaskViewset(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     filter_backends = [filters.SearchFilter]
+    ordering = ['-id']
     search_fields = ['name', 'project__name', 'project_paper__paper__name']
 
 

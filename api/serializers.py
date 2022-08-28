@@ -237,6 +237,22 @@ class SubmissionSerializer(DynamicFieldsModelSerializer):
     reviewers = UserSerializer(fields=['id', 'username'], many=True, read_only=True)
     activities = serializers.SerializerMethodField()
     ongoing_activity = serializers.SerializerMethodField()
+    abstract = serializers.SerializerMethodField()
+    manuscript = serializers.SerializerMethodField()
+
+
+    def get_manuscript(self, instance):
+        file_upload = instance.project.files.filter(content='MANUSCRIPT', status='ACTIVE').first()
+        if file_upload is None:
+            return ""
+        return file_upload.file.url
+
+
+    def get_abstract(self, instance):
+        file_upload = instance.project.files.filter(content='ABSTRACT', status='ACTIVE').first()
+        if file_upload is None:
+            return ""
+        return file_upload.file.url
 
 
     def get_activities(self, instance):
@@ -252,7 +268,7 @@ class SubmissionSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Submission
         fields = ('id', 'name', 'project', 'project_id', 'venue', 'venue_id', 'status', 
-                  'submitted', 'reviewers', 'activities', 'ongoing_activity')
+                  'submitted', 'reviewers', 'activities', 'ongoing_activity', 'abstract', 'manuscript')
 
 
 class FileUploadSerializer(DynamicFieldsModelSerializer):
@@ -279,7 +295,7 @@ class ReviewerProposalSerializer(DynamicFieldsModelSerializer):
 
 
 class ReviewerSerializer(DynamicFieldsModelSerializer):
-    submission = SubmissionSerializer(fields=['id', 'name', 'project', 'venue'])
+    submission = SubmissionSerializer(fields=['id', 'name', 'project', 'venue', 'abstract', 'manuscript'])
 
     class Meta:
         model = Reviewer
