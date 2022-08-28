@@ -208,7 +208,7 @@ class JournalSerializer(DynamicFieldsModelSerializer):
 class SubmissionReplySerializer(DynamicFieldsModelSerializer):
     user = UserSerializer(fields=['id', 'username'], read_only=True)
     submission_id = serializers.IntegerField(write_only=True)
-    parent_id = serializers.IntegerField(write_only=True)
+    parent_id = serializers.IntegerField(write_only=True, allow_null=True)
 
     def create(self, validated_data):
         validated_data['user'] = self.context.get('request').user
