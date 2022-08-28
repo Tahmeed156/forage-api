@@ -10,6 +10,7 @@ from django.db.models import Q
 
 
 class User(AbstractUser):
+    full_name = models.CharField(max_length=256)
     date_of_birth = models.DateTimeField(null=True, blank=True)
     affiliation = models.CharField(max_length=256, null=True, blank=True)
     designation = models.CharField(max_length=256, null=True, blank=True)

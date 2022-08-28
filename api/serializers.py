@@ -47,7 +47,7 @@ class DomainSerializer(DynamicFieldsModelSerializer):
 class UserSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'affiliation', 'designation', 'email', 'date_of_birth')
+        fields = ('id', 'username', 'full_name', 'affiliation', 'designation', 'email', 'date_of_birth')
 
 
 class ProjectListSerializer(DynamicFieldsModelSerializer):
@@ -95,7 +95,7 @@ class ProjectSerializer(DynamicFieldsModelSerializer):
 
 
 class ProjectCollaboratorSerializer(DynamicFieldsModelSerializer):
-    collaborator = UserSerializer(fields=['id', 'username'])
+    collaborator = UserSerializer(fields=['id', 'username', 'full_name'])
 
     class Meta:
         model = ProjectCollaborator
@@ -206,7 +206,7 @@ class JournalSerializer(DynamicFieldsModelSerializer):
 
 
 class SubmissionReplySerializer(DynamicFieldsModelSerializer):
-    user = UserSerializer(fields=['id', 'username'], read_only=True)
+    user = UserSerializer(fields=['id', 'username', 'full_name'], read_only=True)
     submission_id = serializers.IntegerField(write_only=True)
     parent_id = serializers.IntegerField(write_only=True, allow_null=True)
 
@@ -234,7 +234,7 @@ class SubmissionSerializer(DynamicFieldsModelSerializer):
     venue = VenueSerializer(fields=['id', 'name', 'website'], read_only=True)
     venue_id = serializers.IntegerField(write_only=True)
     # comments = SubmissionCommentSerializer(fields=['id', 'user', 'text'], read_only=True, many=True)
-    reviewers = UserSerializer(fields=['id', 'username'], many=True, read_only=True)
+    reviewers = UserSerializer(fields=['id', 'username', 'full_name'], many=True, read_only=True)
     activities = serializers.SerializerMethodField()
     ongoing_activity = serializers.SerializerMethodField()
     abstract = serializers.SerializerMethodField()
