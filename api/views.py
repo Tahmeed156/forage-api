@@ -359,6 +359,7 @@ class VenueViewset(viewsets.GenericViewSet,
 class SubmissionViewset(viewsets.GenericViewSet, 
                         mixins.CreateModelMixin,
                         mixins.ListModelMixin, 
+                        mixins.DestroyModelMixin, 
                         mixins.RetrieveModelMixin):
     serializer_class = SubmissionSerializer
     filterset_fields = ['project', 'reviewers']

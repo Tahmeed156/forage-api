@@ -231,7 +231,7 @@ class SubmissionCommentSerializer(SubmissionReplySerializer):
 class SubmissionSerializer(DynamicFieldsModelSerializer):
     project = ProjectSerializer(fields=['id', 'name'], read_only=True)
     project_id = serializers.IntegerField(write_only=True)
-    venue = VenueSerializer(fields=['id', 'name'], read_only=True)
+    venue = VenueSerializer(fields=['id', 'name', 'website'], read_only=True)
     venue_id = serializers.IntegerField(write_only=True)
     # comments = SubmissionCommentSerializer(fields=['id', 'user', 'text'], read_only=True, many=True)
     reviewers = UserSerializer(fields=['id', 'username'], many=True, read_only=True)

@@ -286,8 +286,8 @@ class Submission(models.Model):
 
 class SubmissionComment(models.Model):
     # Type (Author/Reviewer)
-    submission = models.ForeignKey(Submission, on_delete=models.PROTECT, related_name='comments')
-    reviewer_thread = models.ForeignKey(User, on_delete=models.PROTECT, related_name=None)
+    submission = models.ForeignKey(Submission, on_delete=models.CASCADE, related_name='comments')
+    reviewer_thread = models.ForeignKey(User, on_delete=models.CASCADE, related_name=None)
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='submission_comments')
     text = models.TextField()
     datetime = models.DateTimeField(auto_now_add=True)
