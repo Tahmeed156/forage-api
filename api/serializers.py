@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth.hashers import make_password
 from api.models import *
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
@@ -45,9 +46,18 @@ class DomainSerializer(DynamicFieldsModelSerializer):
 
 
 class UserSerializer(DynamicFieldsModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+
+    def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data['password'])
+        return super().create(validated_data)
+
+
     class Meta:
         model = User
-        fields = ('id', 'username', 'full_name', 'affiliation', 'designation', 'email', 'date_of_birth')
+        fields = ('id', 'username', 'full_name', 'affiliation', 'designation', 'email', 
+                  'date_of_birth', 'password')
 
 
 class ProjectListSerializer(DynamicFieldsModelSerializer):

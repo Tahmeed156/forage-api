@@ -448,7 +448,9 @@ class UserViewset(viewsets.GenericViewSet,
     serializer_class = UserSerializer
     queryset = User.objects.all()
     filter_backends = [filters.SearchFilter]
-    search_fields = ['username']
+    search_fields = ['username', 'full_name']
+    authentication_classes = []
+    permission_classes = []
 
 
 class ForageAuthToken(ObtainAuthToken):
