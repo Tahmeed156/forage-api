@@ -510,7 +510,7 @@ class ReviewerViewset(viewsets.GenericViewSet,
                       mixins.RetrieveModelMixin, 
                       mixins.UpdateModelMixin):
     serializer_class = ReviewerSerializer
-    filterset_fields = ['user_id', 'venue_id', 'is_submitted']
+    filterset_fields = ['user_id', 'submission_id', 'is_submitted']
 
 
     def get_queryset(self):

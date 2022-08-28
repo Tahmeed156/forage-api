@@ -279,6 +279,8 @@ class ReviewerProposalSerializer(DynamicFieldsModelSerializer):
 
 
 class ReviewerSerializer(DynamicFieldsModelSerializer):
+    submission = SubmissionSerializer(fields=['id', 'name', 'project', 'venue'])
+
     class Meta:
         model = Reviewer
-        fields = ('id', 'user', 'venue', 'review', 'is_submitted', 'submit_date')
+        fields = ('id', 'user', 'submission', 'submission_id', 'review', 'is_submitted', 'submit_date')
