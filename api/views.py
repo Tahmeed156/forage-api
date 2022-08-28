@@ -465,8 +465,7 @@ class ForageAuthToken(ObtainAuthToken):
 class ReviewerProposalViewset(viewsets.GenericViewSet, 
                               mixins.CreateModelMixin,
                               mixins.ListModelMixin, 
-                              mixins.RetrieveModelMixin, 
-                              mixins.UpdateModelMixin):
+                              mixins.RetrieveModelMixin):
     serializer_class = ReviewerProposalSerializer
     filterset_fields = ['reviewer_id', 'venue_id']
     search_fields = ['username']
@@ -474,6 +473,36 @@ class ReviewerProposalViewset(viewsets.GenericViewSet,
 
     def get_queryset(self):
         return ReviewerProposal.objects.filter(reviewer=self.request.user).all()
+
+
+    @action(detail=True, methods=['POST'])
+    def reject(self, request, pk):
+        proposal_instance = ReviewerProposal.objects.get(id=pk)
+
+        if proposal_instance.status != 'RECEIVED':
+            raise exceptions.APIException("Proposal already accepted/rejected")
+
+        proposal_instance.status = 'REJECTED'
+        proposal_instance.save()
+
+        serializer = ReviewerProposalSerializer(proposal_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+    @action(detail=True, methods=['POST'])
+    def accept(self, request, pk):
+        proposal_instance = ReviewerProposal.objects.get(id=pk)
+
+        if proposal_instance.status != 'RECEIVED':
+            raise exceptions.APIException("Proposal already accepted/rejected")
+
+        proposal_instance.venue.reviewers.add(proposal_instance.reviewer)
+
+        proposal_instance.status = 'ACCEPTED'
+        proposal_instance.save()
+
+        serializer = ReviewerProposalSerializer(proposal_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ReviewerViewset(viewsets.GenericViewSet,
